@@ -1,0 +1,11 @@
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+k8s/
+.env
+.env.local
+node_modules
+storage/logs/*.log
+storage/framework/*.log
+*.log
