@@ -39,6 +39,9 @@ cd luffof
 composer install
 npm install
 
+# Fix npm vulnerable packages (if any)
+npm audit fix
+
 # Setup environment
 php artisan env
 
