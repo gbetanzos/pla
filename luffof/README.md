@@ -1,66 +1,232 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Blood Pressure Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 11 + Inertia.js application for tracking and managing blood pressure readings with user authentication.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **User Authentication** - Laravel Breeze with Vue.js
+- **Blood Pressure CRUD** - Full create, read, update, delete functionality
+- **Health Status Indicators** - Visual status (Normal/Elevated/High) based on systolic/diastolic ranges
+- **Notes System** - Add contextual notes to each reading
+- **Database Seeded** - Sample data for testing
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 11.31
+- **Frontend**: Vue 3.4 + Inertia.js 2.0
+- **Styling**: Tailwind CSS 3.2
+- **Database**: SQLite (production-ready)
+- **Testing**: PHPUnit 11.0
 
-## Learning Laravel
+## System Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.2.0 to <9.0
+- Composer
+- Node.js 18+
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Quick Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+# Install PHP 8.2 (if not installed)
+# Ubuntu/Debian:
+sudo apt install php8.2 php8.2-cli php8.2-mysql php8.2-pdo php8.2-sqlite3 php8.2-xml php8.2-curl php8.2-mbstring php8.2-zip
 
-## Laravel Sponsors
+# Clone repository
+git clone <repo-url>
+cd luffof
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Install dependencies
+composer install
+npm install
 
-### Premium Partners
+# Setup environment
+php artisan env
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+# Create SQLite database
+touch database/database.sqlite
+
+# Run migrations
+php artisan migrate --force
+
+# Seed sample data
+php artisan db:seed --class=BPSampleSeeder
+
+# Start development server
+php artisan serve
+
+# Open in browser
+# http://localhost:8000/bp
+```
+
+## Development Commands
+
+```bash
+# Serve application
+php artisan serve
+
+# Hot reload with Vite
+npm run dev
+
+# Run dev server with console
+npm run dev
+
+# Lint and type check
+composer run lint
+npm run lint
+
+# Unit tests
+vendor/bin/phpunit
+
+# Run with coverage
+vendor/bin/phpunit --coverage
+
+# View application logs
+tail -f storage/logs/laravel.log
+```
+
+## Database Setup
+
+The application uses SQLite by default. For MySQL/MariaDB:
+
+```bash
+# Edit .env
+# Change DB_CONNECTION=mysql
+# Set DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+
+# Run migrations
+php artisan migrate
+
+# Seed data
+php artisan db:seed
+```
+
+## Project Structure
+
+```
+luffof/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   └── BpController.php          # BP CRUD controller
+│   │   └── Contracts/
+│   │       └── BloodPressure.php          # BP status contract
+│   └── Models/
+│       └── BloodPressure.php              # BP model with user relationship
+├── database/
+│   ├── factories/
+│   │   └── BloodPressureFactory.php       # BP factory for testing
+│   ├── migrations/
+│   │   └── 2026_04_19_050428_..._table.php
+│   └── seeders/
+│       └── BPSampleSeeder.php             # Sample BP data
+├── resources/
+│   ├── js/
+│   │   └── Pages/
+│   │       └── Bp/
+│   │           ├── Index.vue              # List all BP records
+│   │           └── Edit.vue               # Create/Edit form
+│   └── views/
+│       └── bp/
+│           ├── index.blade.php            # Blade index view
+│           ├── create.blade.php           # Blade create view
+│           ├── show.blade.php             # Blade show view
+│           └── edit.blade.php             # Blade edit view
+├── routes/
+│   └── web.php                            # BP CRUD routes (/bp/*)
+├── tests/
+│   └── Feature/
+│       └── BloodPressureTest.php          # Feature tests
+├── composer.json
+├── package.json
+└── README.md
+```
+
+## Routes
+
+| URL | Method | Controller | Description |
+|-----|--------|------------|-------------|
+| `/bp` | GET | `BpController@index` | List all BP records |
+| `/bp/create` | GET | `BpController@create` | Show create form |
+| `/bp` | POST | `BpController@store` | Store new BP record |
+| `/bp/{id}` | GET | `BpController@show` | Show single record |
+| `/bp/{id}/edit` | GET | `BpController@edit` | Show edit form |
+| `/bp/{id}` | PUT | `BpController@update` | Update BP record |
+| `/bp/{id}` | DELETE | `BpController@destroy` | Delete BP record |
+
+## Health Status Ranges
+
+| Systolic | Diastolic | Status | Color |
+|----------|-----------|--------|-------|
+| ≤120 | ≤80 | Normal | Green |
+| ≤130 | ≤80 | Elevated | Yellow |
+| >130 or >80 | - | High | Red |
+
+## Unit Tests
+
+Run all tests:
+```bash
+vendor/bin/phpunit
+```
+
+Run with coverage:
+```bash
+vendor/bin/phpunit --coverage
+```
+
+Run specific test file:
+```bash
+vendor/bin/phpunit tests/Feature/BloodPressureTest.php
+```
+
+With Laravel Pail (composer plugin):
+```bash
+composer run test
+```
+
+### Test Coverage
+
+The test suite includes:
+- ✅ Authentication requirements
+- ✅ Create/Store with validation
+- ✅ Update functionality
+- ✅ Delete with ownership protection  
+- ✅ View rendering with status indicators
+- ✅ Error handling and redirects
+
+## Sample Data
+
+Run this seeder to get sample blood pressure readings:
+
+```bash
+php artisan db:seed --class=BPSampleSeeder
+```
+
+Creates:
+- 2 users with 5 BP readings each
+- Mix of systolic/diastolic values
+- Sample notes for each reading
+
+## API (Optional)
+
+The application can expose an API using Laravel Sanctum. Currently:
+- Sanctum is configured but routes not yet defined
+- Authentication token management ready
+- Add API routes in `routes/api.php` when needed
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Create feature branch
+2. Make changes
+3. Test your changes
+4. Submit pull request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License
+
+## Notes
+
+- Blade views are the primary delivery mechanism (production-ready)
+- Vue components exist for potential SPA features
+- Application uses Laravel Breeze for authentication
+- No database seeding - run `php artisan db:seed` to load sample data

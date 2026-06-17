@@ -36,11 +36,17 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
+                             >
+                                     Dashboard
+                                 </NavLink>
+                                 <NavLink
+                                     :href="route('bp.index')"
+                                     :active="route().current('bp.*')"
+                                 >
+                                     Blood Pressure
+                                 </NavLink>
+                             </div>
+                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->

@@ -19,5 +19,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Sample blood pressure readings
+        App\Models\BloodPressure::factory()->count(5)->create(['user_id' => 1]);
     }
 }
