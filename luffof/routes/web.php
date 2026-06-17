@@ -15,9 +15,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', {
-        bpCount: App\Models\BloodPressure::count(),
-    });
+    return Inertia::render('Dashboard', [
+        'bpCount' => App\Models\BloodPressure::count(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
