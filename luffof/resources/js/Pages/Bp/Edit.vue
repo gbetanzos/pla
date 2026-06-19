@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import { router, route } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 
 const isSubmitting = ref(false);
 const record = ref(null);
 
-await router.get(route('bp.edit', record.value?.id));
-record.value = route('bp.record');
+await router.get('/bp/' + record.value?.id);
+record.value = { _id: 0, systolic: 0, diastolic: 0, notes: '', user: 0, user_name: '', created_at: null, history: [] };
 
 const submit = (e) => {
     e.preventDefault();
@@ -17,12 +17,12 @@ const submit = (e) => {
 
     isSubmitting.value = true;
 
-    router.put(route('bp.update', record.value.id), {
+    router.put('/bp/' + record.value.id, {
         systolic: formData.get('systolic'),
         diastolic: formData.get('diastolic'),
         notes: formData.get('notes'),
     }).then(() => {
-        router.replace(route('bp.show', record.value.id));
+        router.replace('/bp/' + record.value.id);
     }).finally(() => {
         isSubmitting.value = false;
     });

@@ -1,20 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { router, route } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 
 const bpRecord = ref(null);
-const loading = ref(true);
 
-const getStatus = computed(() => {
-    if (!bpRecord.value) return '';
-    const { systolic, diastolic } = bpRecord.value;
+const getStatus = (bp) => {
+    if (!bp) return '';
+    const { systolic, diastolic } = bp;
     if (systolic <= 120 && diastolic <= 80) return 'green';
     if (systolic <= 130 && diastolic <= 80) return 'yellow';
     return 'red';
-});
-
-await router.get(route('bp.show', bpRecord.value?.id));
-bpRecord.value = route('bp.record');
+};
 </script>
 
 <template>
