@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\BloodPressure;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,14 +14,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create user if not exists
+        $user = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => '$2y$12$XBradtH2NqSD7GkI2qJPYu6nFBmm3isn6HySiRBrjKEZ9H5gCO2y6',
+            ]
+        );
 
         // Sample blood pressure readings
-        App\Models\BloodPressure::factory()->count(5)->create(['user_id' => 1]);
+        for ($i = 0; $i < 5; $i++) {
+            BloodPressure::create([
+                'user_id' => $user->id,
+                'systolic' => rand(100, 160),
+                'diastolic' => rand(60, 100),
+                'notes' => null,
+            ]);
+        }
     }
 }
