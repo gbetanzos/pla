@@ -1,9 +1,25 @@
-<x-guest-layout>
-    <div class="mb-4 text-center">
-        <ol class="text-lg font-medium">
-            <li>Sign in to start tracking</li>
-            <li>Enter your blood pressure readings</li>
-        </ol>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title inertia>{{ config('app.name') }} - Blood Pressure Records</title>
+    @vite(['resources/js/app.js'])
+</head>
+<body class="font-sans text-gray-900 antialiased bg-gray-100">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+        <div class="mx-auto max-w-4xl w-full">
+            <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-indigo-700 hover:text-indigo-900">
+                ← Back to dashboard
+            </a>
+            
+            <div class="mt-4 text-center">
+                <ol class="text-lg font-medium">
+                    <li>Sign in to start tracking</li>
+                    <li>Enter your blood pressure readings</li>
+                </ol>
+            </div>
+        </div>
     </div>
 
     <div class="mb-6 text-2xl font-medium text-gray-900">
@@ -15,7 +31,7 @@
             ← Back to dashboard
         </a>
 
-        <a href="{{ route('bp.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white pl-3 pr-4 py-2 rounded-md font-medium">
+        <a href="{{ route('bp.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium">
             Add Reading
         </a>
     </div>
@@ -52,7 +68,7 @@
                             <div class="mt-4 flex items-center justify-end space-x-2">
                                 <a
                                     href="{{ route('bp.show', $record) }}"
-                                    class="text-blue-500 hover:text-blue-700 p-2"
+                                    class="text-blue-500 hover:text-blue-700 px-3 py-1 rounded"
                                 >
                                     View
                                 </a>
@@ -71,11 +87,15 @@
                                 <a
                                     href="{{ route('bp.destroy', $record) }}"
                                     method="delete"
-                                    onclick="event.preventDefault(); this.closest('form').submit();"
                                     class="text-red-500 hover:text-red-700 p-2"
+                                    onclick="event.preventDefault(); if(confirm('Delete this record?')) this.closest('form').submit();"
                                 >
                                     🗑️
                                 </a>
+                                <form method="POST" action="{{ route('bp.destroy', $record) }}" class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </div>
                         </div>
                     @empty
@@ -87,4 +107,5 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</body>
+</html>

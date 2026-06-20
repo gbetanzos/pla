@@ -1,4 +1,18 @@
-<x-guest-layout>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title inertia>{{ config('app.name') }} - Add Blood Pressure Reading</title>
+    @vite(['resources/js/app.js'])
+</head>
+<body class="font-sans text-gray-900 antialiased bg-gray-100">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+        <div class="mx-auto max-w-lg w-full">
+            <div class="mb-4">
+                <a href="{{ route('bp.index') }}" class="text-indigo-600 hover:text-indigo-900 font-medium">&larr; Back</a>
+            </div>
+
     <x-slot name="header">
         <div>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -59,10 +73,11 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end space-x-3">
-                <x-primary-button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium">
                     Add Reading
-                </x-primary-button>
+                </button>
             </div>
         </form>
     </div>
-</x-guest-layout>
+</body>
+</html>
