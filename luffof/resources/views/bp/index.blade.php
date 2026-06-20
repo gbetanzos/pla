@@ -28,11 +28,13 @@
                 @endauth
             </div>
             
-            <div class="flex items-center justify-end mb-6">
-                <a href="{{ route('bp.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md font-medium shadow-md">
-                    ✏️ Add Blood Pressure Reading
-                </a>
-            </div>
+             <div class="flex items-center justify-end mb-6">
+                <form method="GET" action="{{ route('bp.create') }}">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md font-medium shadow-md">
+                        ✏️ Add Blood Pressure Reading
+                    </button>
+                </form>
+             </div>
 
             <h2 class="text-xl font-semibold leading-tight text-gray-800 mb-6">
                 Blood Pressure Records
