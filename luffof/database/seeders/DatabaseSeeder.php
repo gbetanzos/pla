@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
-                'password' => '$2y$12$XBradtH2NqSD7GkI2qJPYu6nFBmm3isn6HySiRBrjKEZ9H5gCO2y6',
+                //'password' => '$2y$12$XBradtH2NqSD7GkI2qJPYu6nFBmm3isn6HySiRBrjKEZ9H5gCO2y6',
+                'password' => '$2y$12$C7suJPrWEb468APnPqSLD.k6f9WX08pCruxfAu4hbba.9gz23lFGq',
+                
             ]
         );
 
