@@ -10,10 +10,11 @@ use Illuminate\View\View;
 
 class BpController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $bpRecords = BloodPressure::with('user')->latest()->get();
-        return view('bp.index', compact('bpRecords'));
+        $authUser = $request->user();
+        return view('bp.index', compact('bpRecords', 'authUser'));
     }
 
     public function create(): View
