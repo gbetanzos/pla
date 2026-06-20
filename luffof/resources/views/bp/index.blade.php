@@ -14,16 +14,22 @@
             </a>
             
             <div class="mt-4 text-center">
-                <ol class="text-lg font-medium">
-                    <li>Sign in to start tracking</li>
-                    <li>Enter your blood pressure readings</li>
-                </ol>
+                @auth
+                    <ol class="text-lg font-medium">
+                        <li>Welcome back, {{ $authUser->name }}!</li>
+                        <li>Add your blood pressure readings below</li>
+                    </ol>
+                    <div class="mb-6 text-2xl font-medium text-indigo-600">
+                        Welcome, {{ $authUser->name }}!
+                    </div>
+                @else
+                    <ol class="text-lg font-medium">
+                        <li>Sign in to start tracking</li>
+                        <li>Enter your blood pressure readings</li>
+                    </ol>
+                @endauth
             </div>
         </div>
-    </div>
-
-    <div class="mb-6 text-2xl font-medium text-gray-900">
-        Welcome, {{ $authUser->name }}!
     </div>
 
     <div class="flex items-center justify-between mb-6">
