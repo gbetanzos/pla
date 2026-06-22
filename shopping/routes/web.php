@@ -3,23 +3,31 @@
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShoppingListController;
 
-// Products
+// Products (plural for multiple, single for show/edit)
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
+Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
 // Shopping Lists
-Route::get('/shopping-lists', [ShoppingListController::class, 'index'])->name('shopping-lists.index');
-Route::get('/shopping-lists/create', [ShoppingListController::class, 'create'])->name('shopping-lists.create');
-Route::post('/shopping-lists', [ShoppingListController::class, 'store'])->name('shopping-lists.store');
-Route::get('/shopping-lists/{list}', [ShoppingListController::class, 'show'])->name('shopping-lists.show');
-Route::get('/shopping-lists/{list}/edit', [ShoppingListController::class, 'edit'])->name('shopping-lists.edit');
-Route::put('/shopping-lists/{list}', [ShoppingListController::class, 'update'])->name('shopping-lists.update');
-Route::delete('/shopping-lists/{list}', [ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy');
-Route::post('/shopping-lists/{list}/items/{item_id}/toggle', [ShoppingListController::class, 'toggleItem'])->name('shopping-lists.toggle-item');
+Route::get('/shopping-list', [ShoppingListController::class, 'index'])->name('shopping-list.index');
+Route::get('/shopping-list/create', [ShoppingListController::class, 'create'])->name('shopping-list.create');
+Route::post('/shopping-list', [ShoppingListController::class, 'store'])->name('shopping-list.store');
+Route::get('/shopping-list/{list}', [ShoppingListController::class, 'show'])->name('shopping-list.show');
+Route::get('/shopping-list/{list}/edit', [ShoppingListController::class, 'edit'])->name('shopping-list.edit');
+Route::put('/shopping-list/{list}', [ShoppingListController::class, 'update'])->name('shopping-list.update');
+Route::post('/shopping-list/{list}/toggle', [ShoppingListController::class, 'toggle'])->name('shopping-list.toggle');
+Route::post('/shopping-list/{list}/mark-complete', [ShoppingListController::class, 'markComplete'])->name('shopping-list.mark-complete');
+Route::post('/shopping-list/{list}/mark-complete', [ShoppingListController::class, 'markComplete'])->name('shopping-list.mark-complete');
+Route::delete('/shopping-list/{list}', [ShoppingListController::class, 'destroy'])->name('shopping-list.destroy');
 
-// Home redirects
-Route::get('/', function () { return redirect()->route('shopping-lists.index'); });
+// Home
+Route::get('/', function () {
+    $lists = ShoppingList::whereNotNull('user_id')->orderBy('created_at', 'desc')->paginate(10);
+    foreach ($lists as $list) {
+        $list->load('items');
+    }
+    return view('shopping-lists.index', compact('lists'));
+});

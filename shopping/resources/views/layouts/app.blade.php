@@ -48,7 +48,35 @@
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
+        @if(session('error'))
+            <div class="alert alert-error">{{ session('error') }}</div>
+        @endif
         @yield('content')
     </main>
 </body>
+<script>
+document.querySelectorAll('[data-confirm]').forEach(el => {
+    const btn = el.querySelector('.btn-danger, button');
+    if (btn) {
+        btn.onclick = (e) => window.confirm('Delete this item?') && window.location.href = el.dataset.confirm;
+        el.dataset.confirm = el.dataset.deleteLink || el.href;
+        el.innerHTML = btn.innerHTML;
+        btn.onclick = null;
+    }
+});
+</script>
+</body>
 </html>
+<!-- Delete confirm -->
+<script>
+document.querySelectorAll('[data-confirm]').forEach(function(el){
+  var btn = el.querySelector('.btn-danger') || el;
+  if(btn){
+    btn.onclick = function(e){
+      if(!confirm('Delete this list?')) return true;
+      window.location.href = el.href;
+      return false;
+    };
+  }
+});
+</script>

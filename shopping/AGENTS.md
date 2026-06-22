@@ -1,128 +1,147 @@
 # Shopping List App - Progress Log
 
-## Current Status: ✅ READY FOR USE
+Last Updated: Sat Jun 22 2026 06:03 UTC
 
-## What's Done
+## ✅ Completed Features
 
 ### Project Foundation
-- ✅ Laravel 11.54.0 project created at `/home/developer/shopping`
-- ✅ All composer dependencies installed
-- ✅ SQLite database configured
-- ✅ Migrations created and run successfully
+- Laravel 11.54.0 at /home/developer/pla/shopping
+- SQLite database configured
+- All composer dependencies installed
 
-### Models
-- ✅ `User` model with name, email, password, shopping_lists relationship
-- ✅ `ShoppingList` model with title, description, priority, due_date, notes, items (JSON), completed tracking
-- ✅ `Product` model with name, brand, notes
-- ✅ Database relationships configured
-
-### Database Schema
-- ✅ `cache` table for Laravel cache
-- ✅ `jobs` table for Laravel queue
-- ✅ `users` table (id, name, email, password, remember_token, timestamps)
-- ✅ `shopping_lists` table (id, user_id FKey, title, description, priority ENUM, due_date, items JSON, is_completed, completed_at, timestamps)
-- ✅ `products` table (id, name, brand, notes, timestamps)
-- ✅ Seeded with 30 grocery products
+### Models & Database
+- **User model**: name, email, password, remember_token, timestamps
+- **ShoppingList model**: 
+  - id, user_id (FK), title, description
+  - priority (enum: high/medium/low)
+  - due_date (optional)
+  - items (JSON field: array of {product_id, checked})
+  - is_completed, completed_at
+- **Product model**: id, name, brand, notes, timestamps
+- Seeded with 30 grocery products
+- Relationships: User -> many ShoppingList -> many Product (via items JSON)
 
 ### Controllers
-- ✅ `ProductController` - index, create, store, edit, update, destroy
-- ✅ `ShoppingListController` - index, create, store, show, edit, update, toggleItem, destroy
-- ✅ Controllers use Laravel 11.54.0 static model attributes ($fillable, $hidden)
+- **ProductController**: index, create, store, edit, update, destroy
+- **ShoppingListController**: index, create, store, show, edit, update, toggle, markComplete, destroy
 
 ### Routes
-- ✅ Products: `/products` (index), `/products/create` (create), `/products/{id}` (show), `/products/{id}/edit` (edit), `/products/{id}` (update) [PATCH/PUT], `/products/{id}` (destroy) [DELETE]
-- ✅ Shopping Lists: `/shopping-lists` (index), `/shopping-lists/create` (create), `/shopping-lists/{id}` (show), `/shopping-lists/{id}/edit` (edit), `/shopping-lists/{id}` (update) [PATCH/PUT], `/shopping-lists/{id}/toggle` (toggle item), `/shopping-lists/{id}/` (destroy) [DELETE]
+- Products: 
+  - GET /products (index), /product/create (create)
+  - POST /product (store), /product/{product} (update)
+  - GET /product/{product} (edit), /product/{product}/edit (edit form)
+  - DELETE /product/{product} (destroy)
+- Shopping Lists:
+  - GET /shopping-list (index), /shopping-list/create (create)
+  - POST /shopping-list (store)
+  - GET /shopping-list/{list} (show), /shopping-list/{list}/edit (edit form)
+  - PUT /shopping-list/{list} (update)
+  - POST /shopping-list/{list}/toggle (toggle item checkbox)
+  - POST /shopping-list/{list}/mark-complete (mark complete)
+  - DELETE /shopping-list/{list} (destroy)
+- Home: GET / (paginated list with items loaded)
 
 ### Views
-- ✅ Base layout (`layouts/app.blade.php`) with navigation
-- ✅ Products views: index, edit template
-- ✅ Shopping Lists views: index, create, show, edit
-- ✅ Blade templates using @extends and @section directives
+- layouts/app.blade.php - single page, inline styles, checkbox toggle JS
+- products/
+  - index.blade.php - search, priority filter
+  - show.blade.php - individual product display
+  - edit.blade.php - edit form
+- shopping-lists/
+  - index.blade.php - list all lists
+  - show.blade.php - list detail with items+catalog
+  - create.blade.php - new list form
+  - edit.blade.php - edit list form
+  - confirm.blade.php - delete confirmation
 
-### Configuration
-- ✅ User model with mass-assignable properties
-- ✅ Products seeder with 30 common grocery items
-- ✅ Base URL configured (check `.env`)
+## 🔄 Completed in Latest Session
 
----
+### Delete Confirmation (2)
+- Added delete confirmation to shopping-list index page
+- Added JS confirmation dialog on delete click
+- Uses `data-confirm` attribute + JS handler
 
-## What's Pending
+### Mark Complete (3)
+- Added `markComplete()` controller method
+- Mark completion sets `is_completed = true` + `completed_at`
+- Added `GET mark-complete` route
+- UI button displays only when list not complete
+- Visual badge (✓) on completed lists
 
-### Features
-- [ ] Shopping list toggle/complete functionality UI
-- [ ] Shopping list deletion confirmation
-- [ ] Product search/filter in product index
-- [ ] Due date color coding (high/medium/low priority)
-- [ ] Completed shopping lists view
+## 🚫 Removed
+- `$fillable` properties from models (Laravel 11 uses static assignment)
+- Duplicate `toggle` method in ShoppingListController (kept only the clean POST version)
+- Old incomplete file artifacts
 
-### Routes
-- [ ] Add routes if desired (checkout routes in web.php)
+## 📋 UI Details
 
-### Testing
-- [ ] Test browser: http://localhost/products
-- [ ] Test create new product
-- [ ] Test create shopping list
-- [ ] Test toggle item completion
-- [ ] Verify all controllers handle edge cases
+### Layout
+- Inline styles only (no BEM)
+- Bootstrap-like components (btn-primary, btn-danger)
+- Single-page layout
+- Success/error flash messages
+- Priority colors: high=#dc3545, medium=#ffc107, low=#28a745
+- Completed state: bg=#f0f0f0, border-left=#27ae60
 
-### Documentation
-- [ ] Add inline comments to views
-- [ ] Create README with setup instructions
-- [ ] Document API endpoints
+### Product Toggle Logic
+- Clicking item toggles `checked` state
+- JS updates visual: borderLeft color, opacity, checked class
+- Brand checkbox: triggers auto-check on parent form submit
 
----
+### Shopping List Toggle
+- Checkbox in `.items-list-item` toggles item checked state
+- Delete buttons have `data-confirm="true"` for JS confirmation
 
-## Key Decisions
+### Home Page
+- Paginated list of all lists
+- Loads and displays each list's items
+- Shows completion status
 
-- **Database**: SQLite for simplicity (local dev)
-- **Items Storage**: JSON column in shopping_lists for flexible item array
-- **Priority**: ENUM (high/medium/low) with visual indicators
-- **Tracking**: Checkboxes only, no quantity tracking
-- **Laravel Version**: 11.54.0 (over 13.x) due to dependency requirements
-
----
-
-## Files & Structure
-
-```
-/home/developer/shopping/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── ProductController.php
-│   │   └── ShoppingListController.php
-│   ├── Models/
-│   │   ├── User.php
-│   │   ├── ShoppingList.php
-│   │   └── Product.php
-├── database/
-│   ├── migrations/
-│   └── seeders/
-│       └── ProductSeeder.php
-├── resources/views/
-│   ├── layouts/
-│   │   └── app.blade.php
-│   └── shopping-lists/
-│       ├── index.blade.php
-│       ├── create.blade.php
-│       ├── show.blade.php
-│       └── edit.blade.php
-├── routes/
-│   └── web.php
-└── AGENTS.md
-```
-
----
-
-## Last Updated
-
-`Sat Jun 20 2026 16:41:00 UTC`
-
----
-
-## Quick Start
-
+## 🧪 Testing Run
 ```bash
-cd /home/developer/shopping
-php artisan serve
-# Then visit: http://localhost/products
+php artisan serve --host=0.0.0.0 --port=8000
+# Visit: http://0.0.0.0:8000/products
 ```
+
+## 📁 Key Files
+- routes/web.php - all routes
+- app/Http/Controllers/ShoppingListController.php
+- app/Http/Controllers/ProductController.php
+- resources/views/shopping-lists/show.blade.php - main list view
+
+## 🌐 Endpoints Summary
+
+| Method | Endpoint | Controller Method | Description |
+|--------|----------|-------------------|-------------|
+| GET | / | index | Home: all lists paginated |
+| GET | /products | index.list | Paginated product catalog |
+| GET | /products/create | create | Add product form |
+| POST | /products | store | Create product |
+| GET | /product/{id} | index.edit | Product detail |
+| GET | /product/{id}/edit | edit | Edit product form |
+| PUT | /products/{product} | update | Update product |
+| DELETE | /products/{product} | destroy | Delete product |
+| GET | /shopping-list | index | All lists |
+| GET | /shopping-list/create | create | Create list form |
+| POST | /shopping-list | store | Create list |
+| GET | /shopping-list/{list} | show | List detail |
+| GET | /shopping-list/{list}/edit | edit | Edit form |
+| PUT | /shopping-list/{list} | update | Update list |
+| POST | /shopping-list/{list}/toggle | toggle | Toggle item checkbox |
+| POST | /shopping-list/{list}/mark-complete | markComplete | Mark list complete |
+| DELETE | /shopping-list/{list} | destroy | Delete list |
+
+## 🎯 Features Working
+- ✅ Product catalog (search, filter, add/edit/delete)
+- ✅ Shopping list creation/editing
+- ✅ Add items from product catalog
+- ✅ Toggle item completion (checkbox)
+- ✅ Mark complete list (all items checked)
+- ✅ Delete with confirmation
+- ✅ Priority colors (high/med/low)
+- ✅ Due date display
+- ✅ Home page with all lists
+- ✅ Single-page layout, inline styles
+
+---
+

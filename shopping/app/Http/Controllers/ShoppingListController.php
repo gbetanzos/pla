@@ -62,7 +62,7 @@ class ShoppingListController extends Controller
         return redirect()->route('shopping-lists.show', $list)->with('success', 'Shopping list updated.');
     }
 
-    public function toggleItem(ShoppingList $list)
+    public function toggleItem(Request $request, ShoppingList $list)
     {
         $itemId = (int)$request->item_id;
         $items = json_decode($list->items, true) ?? [];
@@ -81,7 +81,37 @@ class ShoppingListController extends Controller
 
     public function destroy(ShoppingList $list)
     {
+        if (!$request('confirm')) {
+            return abort(400, 'Please confirm deletion.');
+        }
+        
         $list->delete();
         return redirect()->route('shopping-lists.index')->with('success', 'Shopping list deleted.');
+    }
+
+    public function toggle(Request $request, ShoppingList $list)
+    {
+        $itemId = (int)$request->item_id;
+        $items = json_decode($list->items, true) ?? [];
+        
+        foreach ($items as &$item) {
+            if ($item['product_id'] === $itemId) {
+                $item['checked'] = !$item['checked'];
+            }
+        }
+        
+        $list->items = json_encode($items);
+        $list->save();
+        
+        return redirect()->route('shopping-lists.show', $list);
+    }
+
+    public function markComplete(Request $request, ShoppingList $list)
+    {
+        $list->is_completed = true;
+        $list->completed_at = now();
+        $list->save();
+        
+        return redirect()->route('shopping-lists.show', $list);
     }
 }
