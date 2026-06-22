@@ -1,6 +1,6 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sat Jun 22 2026 06:03 UTC
+Last Updated: Sat Jun 22 2026 07:00 UTC
 
 ## ✅ Completed Features
 
@@ -96,6 +96,23 @@ Last Updated: Sat Jun 22 2026 06:03 UTC
 - Paginated list of all lists
 - Loads and displays each list's items
 - Shows completion status
+
+## 📦 Docker Support
+
+### Docker Setup
+- **Dockerfile**: PHP 8.3 CLI with Composer, SQLite, ZIP support
+- **docker-compose.yml**: Simple single-service setup with volume mounts
+- **Build**: `docker-compose up --build`
+- **Volume**: Live-mont project at `/var/www/shopping`
+- **Port**: `8000:8000`
+
+### Quick Start
+```bash
+cd /shopping
+docker build -t shopping-app .
+docker run -p 8000:8000 shopping-app
+# Visit: http://localhost:8000/products
+```
 
 ## 🧪 Testing Run
 ```bash

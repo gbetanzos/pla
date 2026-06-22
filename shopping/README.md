@@ -7,52 +7,194 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Shopping List App - Grocery Dashboard
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A full-featured Laravel web application for managing grocery shopping lists and product catalogs. Features user authentication, product catalog with search/filter, shopping lists with priorities, and interactive item management.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Product Catalog**: Browse, search, filter by priority/category, add/edit/delete products
+- **Shopping Lists**: Create multiple lists with titles, descriptions, and due dates
+- **Item Management**: Add items from catalog, toggle completion with checkboxes, mark lists complete
+- **Priorities**: Visual color-coding (High/Medium/Low) for items and lists
+- **User Accounts**: Individual lists per user, personal product library
+- **Responsive UI**: Single-page Bootstrap-styled interface with inline styles
 
-## Learning Laravel
+### Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Laravel**: 11.54.0
+- **PHP**: 8.3+
+- **Database**: SQLite (with support for MySQL/PostgreSQL)
+- **Composer**: PHP dependency management
+- **Vue.js**: For checkbox toggle logic
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Getting Started
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+#### Prerequisites
 
-## Agentic Development
+- PHP 8.3+
+- Composer
+- Docker (optional)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+#### Installation
 
 ```bash
-composer require laravel/boost --dev
+cd /shopping
 
-php artisan boost:install
+# Install dependencies
+composer install
+
+# Setup .env (first run)
+cp .env.example .env
+php artisan key:generate
+php artisan migrate:fresh --seed
+php artisan serve --host=0.0.0.0 --port=8000
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+#### Docker Setup
 
-## Contributing
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# View logs
+docker-compose logs -f app
+```
 
-## Code of Conduct
+**Docker Compose Setup:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```yaml
+version: '3.8'
 
-## Security Vulnerabilities
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shopping-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/shopping
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=sqlite
+    networks:
+      - shopping-net
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+networks:
+  shopping-net:
+    driver: bridge
+```
 
-## License
+**Dockerfile Setup:**
+
+```dockerfile
+FROM php:8.3-cli
+
+RUN apt-get update && apt-get install -y \
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip && \
+    pecl install zip pdo_sqlite && \
+    docker-php-ext-enable zip pdo_sqlite && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+WORKDIR /var/www/shopping
+COPY . .
+RUN composer install --no-dev --optimize-autoloader
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+```
+
+### Usage
+
+1. **Visit**: http://localhost:8000
+2. **Products**: Browse `/products` to view catalog
+3. **Create List**: Visit `/shopping-list/create`
+4. **Add Items**: On a list, click items from product catalog
+5. **Manage**: Toggle items, mark complete, delete with confirmation
+6. **Priority**: Use visual cues (red/yellow/green) for urgency
+
+### Project Structure
+
+```
+shopping/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── ProductController.php
+│   │   └── ShoppingListController.php
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Product.php
+│   │   └── ShoppingList.php
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── resources/
+│   └── views/
+│       ├── layouts/
+│       └── {shop,products,services}/
+├── routes/
+│   └── web.php
+├── Dockerfile
+├── docker-compose.yml
+└── AGENTS.md
+```
+
+### API Endpoints
+
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/` | GET | Home - Paginated list of all shopping lists |
+| `/products` | GET | Product catalog with search/filter |
+| `/product/{id}` | GET | Product detail |
+| `/product/{id}/edit` | GET | Edit product form |
+| `/shopping-list` | GET | List all shopping lists |
+| `/shopping-list/create` | GET | Create new list |
+| `/shopping-list/{id}` | GET | View list with items |
+| `/shopping-list/{id}/toggle` | POST | Toggle item checkbox |
+| `/shopping-list/{id}/mark-complete` | POST | Mark list complete |
+
+### Database Schema
+
+**Products Table:**
+```sql
+CREATE TABLE products (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    brand TEXT,
+    notes TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
+
+**Shopping Lists Table:**
+```sql
+CREATE TABLE shopping_lists (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    title TEXT NOT NULL,
+    description TEXT,
+    priority ENUM('high','medium','low'),
+    due_date DATE,
+    items TEXT,  -- JSON: [{"product_id":1, "checked":false}]
+    is_completed BOOLEAN,
+    completed_at TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
+
+### License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### Key Files
+
+- `routes/web.php` - All CRUD routes
+- `app/Http/Controllers/ProductController.php` - Product management
+- `app/Http/Controllers/ShoppingListController.php` - List management
+- `resources/views/*/` - Blade templates
+- `AGENTS.md` - Development progress log
