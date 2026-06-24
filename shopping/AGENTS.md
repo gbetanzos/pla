@@ -56,6 +56,11 @@ Last Updated: Sat Jun 22 2026 07:00 UTC
 
 ## 🔄 Completed in Latest Session
 
+### Bug Fix: Auth Error
+- Fixed "Attempt to read property 'id' on null" error in ShoppingListController@store
+- Added `auth` middleware to POST /shopping-list store route
+- Shopping list creation now requires authentication
+
 ### Delete Confirmation (2)
 - Added delete confirmation to shopping-list index page
 - Added JS confirmation dialog on delete click
@@ -159,6 +164,7 @@ php artisan serve --host=0.0.0.0 --port=8000
 - ✅ Due date display
 - ✅ Home page with all lists
 - ✅ Single-page layout, inline styles
+- ✅ Auth middleware on shopping-list store
 
 ---
 

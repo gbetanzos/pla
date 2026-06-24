@@ -4,14 +4,12 @@
 <div class="container">
     <div class="form-group">
         <a href="{{ route('products.index') }}" class="btn btn-secondary">← Back to products</a>
-        <a href="{{ route('products.show', $product) }}" class="btn btn-info">View Product</a>
-        <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">Edit Product</a>
     </div>
 
     <div style="background: white; padding: 20px; border-radius: 5px; box-shadow: rgba(0,0,0,0.1);">
         <h2>Edit Product</h2>
 
-        <form action="{{ route('products.update', $product) }}" method="POST">
+        <form action="{{ route('product.update', $product) }}" method="PUT">
             @csrf
             @method('PUT')
 

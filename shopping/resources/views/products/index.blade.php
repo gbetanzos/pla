@@ -19,7 +19,7 @@
         </form>
     </div>
     
-    <a href="{{ route('products.create') }}" class="btn btn-success" style="margin: 15px 0;">+ Add Product</a>
+    <a href="{{ route('product.create') }}" class="btn btn-success" style="margin: 15px 0;">+ Add Product</a>
     
     @if($products->isEmpty())
         <p>No products foundmatching your filters</p>

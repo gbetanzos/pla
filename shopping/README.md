@@ -47,7 +47,11 @@ composer install
 # Setup .env (first run)
 cp .env.example .env
 php artisan key:generate
-php artisan migrate:fresh --seed
+
+# Create database file and run migrations
+php artisan migrate:fresh --seed --path=database/database.sqlite
+
+# Start the server
 php artisan serve --host=0.0.0.0 --port=8000
 ```
 
