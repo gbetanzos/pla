@@ -1,6 +1,6 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sat Jun 22 2026 07:00 UTC
+Last Updated: Sat Jun 22 2026 07:30 UTC
 
 ## ✅ Completed Features
 
@@ -141,6 +141,7 @@ php artisan serve --host=0.0.0.0 --port=8000
 | Method | Endpoint | Controller Method | Description |
 |--------|----------|-------------------|-------------|
 | GET | / | index | Home: all lists paginated |
+| GET | /dashboard | index.dashboard | Dashboard view |
 | GET | /products | index.list | Paginated product catalog |
 | GET | /products/create | create | Add product form |
 | POST | /products | store | Create product |
@@ -159,6 +160,18 @@ php artisan serve --host=0.0.0.0 --port=8000
 | DELETE | /shopping-list/{list} | destroy | Delete list |
 
 ## 🎯 Features Working
+- ✅ Product catalog (search, filter, add/edit/delete)
+- ✅ Shopping list creation/editing
+- ✅ Add items from product catalog
+- ✅ Toggle item completion (checkbox)
+- ✅ Mark complete list (all items checked)
+- ✅ Delete with confirmation
+- ✅ Priority colors (high/med/low)
+- ✅ Due date display
+- ✅ Home page with all lists
+- ✅ Single-page layout, inline styles
+- ✅ Auth middleware on shopping-list store
+- ✅ Dashboard route fixed (dashboard.blade.php → landing/dashboard.blade.php)
 - ✅ Product catalog (search, filter, add/edit/delete)
 - ✅ Shopping list creation/editing
 - ✅ Add items from product catalog
