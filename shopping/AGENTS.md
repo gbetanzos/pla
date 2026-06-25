@@ -56,6 +56,11 @@ Last Updated: Sat Jun 22 2026 07:00 UTC
 
 ## 🔄 Completed in Latest Session
 
+### Latest Updates (Jun 22 07:25 UTC)
+- Changed show() view reference from 'shopping-lists.show' to 'admin.shopping-lists.show'
+- Created admin directory: resources/views/admin/shopping-lists/show.blade.php
+- Added smart checkbox logic: first checkbox auto-shows/hides based on item state
+
 ### Bug Fix: Auth Error
 - Fixed "Attempt to read property 'id' on null" error in ShoppingListController@store
 - Added `auth` middleware to POST /shopping-list store route

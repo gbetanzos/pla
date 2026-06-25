@@ -1,0 +1,93 @@
+<?php
+
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\ShoppingListController;
+use App\Models\ShoppingList;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware('guest')->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])
+                ->name('register');
+
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+                ->name('login');
+
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+                ->name('password.request');
+
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+                ->name('password.email');
+
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+                ->name('password.reset');
+
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+                ->name('password.store');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('verify-email', EmailVerificationPromptController::class)
+                ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+                ->middleware(['signed', 'throttle:6,1'])
+                ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'send'])
+                ->middleware(['throttle:6,1'])
+                ->name('verification.send');
+
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+                ->name('password.confirm');
+
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'confirm']);
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+                ->name('logout');
+
+    Route::post('password-reset', [PasswordResetLinkController::class, 'send'])
+                ->name('password.update');
+
+    Route::patch('password', [PasswordController::class, 'update'])->name('password.update');
+
+    // Shopping List Routes (Admin)
+    Route::get('admin/shopping-lists', [ShoppingListController::class, 'index'])
+                ->name('admin.shopping-lists.index');
+
+    Route::get('admin/shopping-list/create', [ShoppingListController::class, 'create'])
+                ->name('admin.shopping-list.create');
+
+    Route::post('admin/shopping-list', [ShoppingListController::class, 'store'])
+                ->name('admin.shopping-list.store');
+
+    Route::get('admin/shopping-list/{list}', [ShoppingListController::class, 'show'])
+                ->name('admin.shopping-list.show');
+
+    Route::get('admin/shopping-list/{list}/edit', [ShoppingListController::class, 'edit'])
+                ->name('admin.shopping-list.edit');
+
+    Route::put('admin/shopping-list/{list}', [ShoppingListController::class, 'update'])
+                ->name('admin.shopping-list.update');
+
+    Route::post('admin/shopping-list/{list}/toggle', [ShoppingListController::class, 'toggle'])
+                ->name('admin.shopping-list.toggle')
+                ->middleware(['throttle:60,1']);
+
+    Route::post('admin/shopping-list/{list}/mark-complete', [ShoppingListController::class, 'markComplete'])
+                ->name('admin.shopping-list.mark-complete');
+
+    Route::delete('admin/shopping-list/{list}', [ShoppingListController::class, 'destroy'])
+                ->name('admin.shopping-list.destroy');
+});

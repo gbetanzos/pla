@@ -2,7 +2,7 @@
 
 @section('content')
 <h2>Edit Shopping List</h2>
-<form action="{{ route('shopping-lists.update', $list) }}" method="POST">
+<form action="{{ route('shopping-list.update', $list) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="form-group">
@@ -36,7 +36,7 @@
         <input type="hidden" name="items[]" value="{{ $list->items ? (json_decode($list->items, true) ?? []) : [] }}">
     </div>
     <button type="submit" class="btn btn-success">Update List</button>
-    <a href="{{ route('shopping-lists.index') }}" class="btn btn-primary" style="margin-left: 10px;">Cancel</a>
+    <a href="{{ route('shopping-list.index') }}" class="btn btn-primary" style="margin-left: 10px;">Cancel</a>
 </form>
 
 <script>
@@ -46,7 +46,7 @@
                 <div style="display: flex; align-items: center; margin: 5px 0; background: #f8f9fa; padding: 5px;">
                     <input type="checkbox" style="margin-right: 10px;" {{ $item['checked'] ? 'checked' : '' }}>
                     <span>{{ $item['name'] }}</span>
-                    <a href="{{ route('shopping-lists.destroy', $list) }}" style="margin-left: 15px;" onclick="return confirm('Also remove this item?')">×</a>
+                    <a href="{{ route('shopping-list.destroy', $list) }}" style="margin-left: 15px;" onclick="return confirm('Also remove this item?')">×</a>
                 </div>
             @endif
         @endforeach

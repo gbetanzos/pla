@@ -20,8 +20,10 @@ class ShoppingListController extends Controller
 
     public function store(Request $request)
     {
+        $user = $request->user() ?? abort(401);
+        
         ShoppingList::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
@@ -33,9 +35,9 @@ class ShoppingListController extends Controller
 
     public function show(ShoppingList $list)
     {
-        $list->load('products');
+        $list->load('items');
         $items = json_decode($list->items, true) ?? [];
-        return view('shopping-lists.show', ['list' => $list, 'items' => $items]);
+        return view('admin.shopping-lists.show', ['list' => $list, 'items' => $items]);
     }
 
     public function edit(ShoppingList $list)

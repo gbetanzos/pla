@@ -2,7 +2,7 @@
 
 @section('content')
 <h2>Create New Shopping List</h2>
-<form action="{{ route('shopping-lists.store') }}" method="POST">
+<form action="{{ route('shopping-list.store') }}" method="POST">
     @csrf
     <div class="form-group">
         <label>Title *</label>

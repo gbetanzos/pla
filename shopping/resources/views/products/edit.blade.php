@@ -42,7 +42,7 @@
 
             <div>
                 <button type="submit" class="btn btn-primary">Update Product</button>
-                <a href="{{ route('shopping-lists.index') }}" class="btn btn-success">View All Shopping Lists</a>
+                <a href="{{ route('shopping-list.index') }}" class="btn btn-success">View All Shopping Lists</a>
             </div>
         </form>
     </div>

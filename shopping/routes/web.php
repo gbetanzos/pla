@@ -1,34 +1,51 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ShoppingListController;
+use App\Http\Controllers\ProfileController;
 use App\Models\ShoppingList;
+use Illuminate\Support\Facades\Route;
 
-// Products (plural for multiple, single for show/edit)
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
-Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
-Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
-Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+ Route::get('/', function () {
+      return view('landing.index', ['lists' => ShoppingList::whereNotNull('user_id')
+          ->select(['id', 'user_id', 'title', 'description', 'priority', 'due_date', 'completed_at', 'is_completed'])
+          ->orderBy('is_completed', 'desc')
+          ->orderBy('created_at', 'desc')
+          ->paginate(10)
+          ->append('path', request()->previousUrl)]);
+  })->name('landing');
 
-// Shopping Lists
-Route::get('/shopping-lists', [ShoppingListController::class, 'index'])->name('shopping-lists.index');
-Route::get('/shopping-lists/create', [ShoppingListController::class, 'create'])->name('shopping-lists.create');
-Route::post('/shopping-lists', [ShoppingListController::class, 'store'])->middleware('auth')->name('shopping-lists.store');
-Route::get('/shopping-lists/{list}', [ShoppingListController::class, 'show'])->name('shopping-lists.show');
-Route::get('/shopping-lists/{list}/edit', [ShoppingListController::class, 'edit'])->name('shopping-lists.edit');
-Route::put('/shopping-lists/{list}', [ShoppingListController::class, 'update'])->name('shopping-lists.update');
-Route::post('/shopping-lists/{list}/toggle', [ShoppingListController::class, 'toggle'])->name('shopping-lists.toggle');
-Route::post('/shopping-lists/{list}/mark-complete', [ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete');
-Route::delete('/shopping-lists/{list}', [ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy');
+Route::get('/dashboard', function () {
+       return view('landing.dashboard');
+   })->name('dashboard');
 
-// Home
-Route::get('/', function () {
-    $lists = ShoppingList::whereNotNull('user_id')->orderBy('created_at', 'desc')->paginate(10);
-    foreach ($lists as $list) {
-        $list->load('items');
+ Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.index.edit');
+Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
+Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
+
+Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-lists.create');
+Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-lists.store');
+
+// Additional aliases for routes used in views
+Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
+Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
+Route::put('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'update'])->name('shopping-lists.update')->where('id', '[0-9]+');
+Route::delete('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy')->where('id', '[0-9]+');
+Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
+
+// Profile routes (Laravel scaffolding)
+Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+
+// Simple login redirect (first page after login)
+Route::get('/login', function () {
+    if(session()->has('user')) {
+        return redirect()->intended('/');
     }
-    return view('shopping-lists.index', compact('lists'));
-});
+    return view('landing.login-page');
+})->name('admin.login');
+
+require __DIR__.'/auth.php';
