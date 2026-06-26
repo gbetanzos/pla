@@ -63,5 +63,11 @@ RUN printf '%s\n' \
 'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
 chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Create SQLite database file
+RUN touch database.sqlite || true
+
+# Run migrations
+RUN php artisan migrate:fresh --seed --force || true
+
 # Set default command
 CMD ["/usr/local/bin/docker-entrypoint.sh"]
