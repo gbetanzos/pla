@@ -3,7 +3,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install essential dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates git openssh-client sudo bash jq \
+    curl ca-certificates git openssh-client sudo bash jq yarn \
     && rm -rf /var/lib/apt/lists/* 
 # Install PHP 8.3 and Laravel 11 prerequisites
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -33,8 +33,19 @@ WORKDIR /var/www/shopping
 # Copy application files
 COPY . .
 
-# Create database directory and SQLite file before composer install
+# Create database directory and SQLite file
 RUN mkdir -p database && touch database/database.sqlite
+
+# Install Node.js and npm, then build assets
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install npm dependencies and build assets
+RUN if [ -f package.json ]; then \
+        npm ci --production && \
+        npm run build; \
+    fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
