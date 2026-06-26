@@ -1,38 +1,31 @@
-FROM php:8.3-cli
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
+# Install essential dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates git openssh-client sudo bash jq \
+    && rm -rf /var/lib/apt/lists/* 
+# Install PHP 8.3 and Laravel 11 prerequisites
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    php8.3 \
+    php8.3-cli \
+    php8.3-bcmath \
+    php8.3-curl \
+    php8.3-gd \
+    php8.3-mbstring \
+    php8.3-zip \
+    php8.3-xml \
+    php8.3-intl \
+    php8.3-xmlrpc \
+    php8.3-dom \
+    php8.3-msgpack \
+    php8.3-sqlite3 \
+    php8.3-imap \
+    php8.3-imagick \
+    libmagickwand-dev \
     curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    libzip-dev \
-    libfreetype6-dev \
-    libjpeg-dev \
-    libgif-dev \
-    libwebp-dev \
-    libxpm-dev \
-    libexif-dev \
-    libjpeg-turbo-dev \
-    libjxl-dev
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite \
-    pdo_mysql \
-    mbstring \
-    exif \
-    pcntl \
-    bcmath \
-    gd \
-    intl \
-    opcache \
-    zip
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+    composer \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /var/www/shopping
