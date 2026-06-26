@@ -1,0 +1,39 @@
+# Environment file - mount from host instead
+.env
+.env.*
+!.env.example
+
+# Composer
+vendor/
+
+# Node modules
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose*.yml.*
+
+# Logs
+storage/logs/*.log
+storage/logs/laravel.log
+npm-debug.log
+*.log
+
+# Testing
+.phpunit.result.cache
+coverage/

@@ -38,7 +38,16 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Generate application key if .env doesn't exist
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi && \
-    php artisan key:generate
+    if [ -f .env ]; then php artisan key:generate; else php artisan key:generate --force; fi
+
+# Create storage and log directories with proper permissions
+RUN mkdir -p storage/logs storage/framework/storage && \
+    touch storage/logs/laravel.log && \
+    chown -R 1000:1000 storage/ logs/
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/ || exit 1
 
 # Create entrypoint script
 RUN printf '%s\n' \
