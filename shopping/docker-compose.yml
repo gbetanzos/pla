@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www/shopping
+      - /var/www/shopping/vendor:/var/www/shopping/vendor:ro
     environment:
       - APP_ENV=local
       - APP_DEBUG=true

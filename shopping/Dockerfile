@@ -36,6 +36,12 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Check if .env exists, if not create from example
+RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
+
+# Generate application key
+RUN php artisan key:generate --force || true
+
 # Generate application key if .env doesn't exist
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi && \
     if [ -f .env ]; then php artisan key:generate; else php artisan key:generate --force; fi
