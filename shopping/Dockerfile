@@ -33,14 +33,14 @@ WORKDIR /var/www/shopping
 # Copy application files
 COPY . .
 
+# Create database directory and SQLite file before composer install
+RUN mkdir -p database && touch database/database.sqlite
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
 # Check if .env exists, if not create from example
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
-
-# Generate application key
-RUN php artisan key:generate --force || true
 
 # Generate application key if .env doesn't exist
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi && \
@@ -60,14 +60,10 @@ RUN printf '%s\n' \
 '#!/bin/sh' \
 'pkill -f "artisan serve" 2>/dev/null || true' \
 'cd /var/www/shopping' \
+'mkdir -p database && touch database/database.sqlite' \
+'php artisan migrate:fresh --seed --force 2>&1' \
 'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
 chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Create SQLite database file
-RUN touch database.sqlite || true
-
-# Run migrations
-RUN php artisan migrate:fresh --seed --force || true
 
 # Set default command
 CMD ["/usr/local/bin/docker-entrypoint.sh"]
