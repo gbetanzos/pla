@@ -43,9 +43,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
 
 # Install npm dependencies and build assets
 RUN if [ -f package.json ]; then \
-        npm ci --production && \
-        npm run build; \
-    fi
+    npm install --omit=dev && \
+    npm run build; \
+fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
