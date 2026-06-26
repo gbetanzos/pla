@@ -43,7 +43,7 @@ RUN if [ ! -f .env ]; then cp .env.example .env || true; fi && \
 # Create storage and log directories with proper permissions
 RUN mkdir -p storage/logs storage/framework/storage && \
     touch storage/logs/laravel.log && \
-    chown -R 1000:1000 storage/ logs/
+    chown -R 1000:1000 storage/
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
