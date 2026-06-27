@@ -1,6 +1,9 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+<section class="mb-4 text-secondary">
+    <h2 class="h4 mb-0"><i class="fas fa-envelope me-2"></i> Verify your email</h2>
+</section>
+
+<div class="mb-4 text-secondary">
+    {{ __('Thanks for signing up! Before getting started, please verify your email address by clicking the link we sent to you. Didn\'t receive the email? We\'ll send you another.') }}
     </div>
 
     @if (session('status') == 'verification-link-sent')

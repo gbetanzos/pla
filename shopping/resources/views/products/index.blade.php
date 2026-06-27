@@ -1,49 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="items-list">
-    <h2>Products</h2>
-    <div style="margin: 15px 0;">
-        <form method="GET" action="{{ route('products.index') }}" style="display: flex; gap: 10px; box-shadow: rgba(0,0,0,0.1); padding: 10px; border-radius: 5px;">
-            <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; flex: 1; max-width: 300px;">
-            <select name="priority" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;">
-                <option value="">All Priorities</option>
-                <option value="1" {{ request('priority') == '1' ? 'selected' : '' }}>High</option>
-                <option value="2" {{ request('priority') == '2' ? 'selected' : '' }}>Medium</option>
-                <option value="3" {{ request('priority') == '3' ? 'selected' : '' }}>Low</option>
-            </select>
-            <button type="submit" style="padding: 8px 16px; border: none; background: #1976#2244; color: white; border-radius: 4px; cursor: pointer;">Filter</button>
+<div class="card">
+    <div class="card-header bg-white border-bottom">
+        <h2 class="mb-0"><i class="fa-solid fa-box-open me-2"></i>Products</h2>
+    </div>
+    <div class="card-body">
+        <form method="GET" action="{{ route('products.index') }}" class="row g-2 align-items-center mb-4 p-3 bg-light rounded">
+            <div class="col-auto">
+                <input type="text" name="search" placeholder="Search products..." 
+                    value="{{ request('search') }}" class="form-control" style="max-width: 300px;">
+            </div>
+            <div class="col-auto">
+                <select name="priority" class="form-select">
+                    <option value="">All Priorities</option>
+                    <option value="1" {{ request('priority') == '1' ? 'selected' : '' }}>High</option>
+                    <option value="2" {{ request('priority') == '2' ? 'selected' : '' }}>Medium</option>
+                    <option value="3" {{ request('priority') == '3' ? 'selected' : '' }}>Low</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
             @if(request('search') || request('priority'))
-                <a href="{{ route('products.index') }}" style="padding: 8px 16px; border: 1px solid #ddd; background: white; color: #333; text-decoration: none; border-radius: 4px; cursor: pointer;">Reset</a>
+                <div class="col-auto">
+                    <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">Reset</a>
+                </div>
             @endif
         </form>
-    </div>
-    
-    <a href="{{ route('products.create') }}" class="btn btn-success" style="margin: 15px 0;">+ Add Product</a>
-    
-    @if($products->isEmpty())
-        <p>No products foundmatching your filters</p>
-    @else
-        @foreach($products as $product)
-            <div class="items-list-item {{ $product->brand ? '' : 'checked' }}" style="
-                background: {{ $product->brand ? '#fff' : '#e8f5e9' }},
-                border-left: {{ $product->priority == 1 ? '4px solid #dc3545' : '' }},
-                {{ $product->priority == 2 ? '4px solid #ffc107' : '' }},
-                {{ $product->priority == 3 ? '4px solid #28a745' : '' }}>
-                <input type="checkbox" class="items-list-item-checkbox" id="p{{ $product->id }}" {{ $product->brand ? '' : 'checked' }}>
-                <span class="items-list-item-title">
-                    <strong>{{ $product->name }}</strong>
-                    @if($product->brand) <small><em>Brand: {{ $product->brand }}</em></small> @endif
-                    @if($product->notes) <br><small><em>{{ $product->notes }}</em></small> @endif
-                    <small style="float: right;">
-                        @if($product->priority == 1) <span style="color: #dc3545">● High</span>
-                        @elseif($product->priority == 2) <span style="color: #ffc107">● Medium</span>
-                        @else <span style="color: #28a745">● Low</span>
-                        @endif
-                    </small>
-                </span>
+        
+        <a href="{{ route('products.create') }}" class="btn btn-success mb-3">
+            <i class="fa-solid fa-plus me-1"></i> Add Product
+        </a>
+        
+        @if($products->isEmpty())
+            <p class="text-muted">No products found matching your filters</p>
+        @else
+            <div class="list-group">
+                @foreach($products as $product)
+                    <label class="list-group-item d-flex align-items-center p-3 {{ $product->brand ? '' : 'active' }}" 
+                           style="{{ $product->priority == 1 ? 'border-left: 4px solid #dc3545;' : '' }}
+                                   {{ $product->priority == 2 ? 'border-left: 4px solid #ffc107;' : '' }}
+                                   {{ $product->priority == 3 ? 'border-left: 4px solid #28a745;' : '' }}">
+                        <input type="checkbox" class="form-check-input me-2" 
+                               id="p{{ $product->id }}" {{ $product->brand ? '' : 'checked' }}>
+                        <div class="flex-grow-1">
+                            <strong class="fs-5">{{ $product->name }}</strong>
+                            @if($product->brand)
+                                <small class="text-muted"><i class="fa-solid fa-tags me-1"></i>{{ $product->brand }}</small>
+                            @endif
+                            @if($product->notes)
+                                <br><small class="text-muted d-block mt-1" style="color: #6c757d;">{{ $product->notes }}</small>
+                            @endif
+                            <div class="text-end mt-2">
+                                @if($product->priority == 1)
+                                    <span class="badge bg-danger"><i class="fa-solid fa-fire me-1"></i>High</span>
+                                @elseif($product->priority == 2)
+                                    <span class="badge bg-warning text-dark"><i class="fa-solid fa-fire-extinguisher me-1"></i>Medium</span>
+                                @else
+                                    <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Low</span>
+                                @endif
+                            </div>
+                        </div>
+                    </label>
+                @endforeach
             </div>
-        @endforeach
-    @endif
+        @endif
+    </div>
 </div>
 @endsection
