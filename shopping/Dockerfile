@@ -86,15 +86,14 @@ RUN php artisan migrate:fresh --seed --force 2>&1 || true
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/ || exit 1
 
-# Add interactive shell entrypoint
+# Add interactive shell entrypoint with key generation
 RUN printf '%s\n' \
     '#!/bin/sh' \
     'set -e' \
-    'pkill -f "artisan serve" 2>/dev/null || true' \
     'cd /var/www/shopping' \
-    'mkdir -p storage/framework/cache/data' \
-    'mkdir -p database && touch database/database.sqlite' \
-    'php artisan migrate:fresh --seed --force 2>&1' \
+    'if [ -f .env ] && ! php artisan env:show 2>/dev/null | grep -q "APP_KEY="; then php artisan key:generate || true; fi' \
+    'mkdir -p storage/framework/cache/data database && touch database/database.sqlite' \
+    'php artisan migrate:fresh --seed --force 2>&1 || true' \
     'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
