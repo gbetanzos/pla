@@ -54,7 +54,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
 
 # Create storage directory first
-RUN mkdir -p storage/app storage/framework storage/logs storage/framework/storage storage/app/private storage/app/public database 2>/dev/null || true
+RUN mkdir -p storage/app storage/framework storage/logs storage/framework/cache/data storage/framework/storage storage/app/private storage/app/public database 2>/dev/null || true
 
 # Copy and ensure .env exists
 COPY .env.example .env
@@ -82,13 +82,10 @@ RUN printf '%s\n' \
     'set -e' \
     'pkill -f "artisan serve" 2>/dev/null || true' \
     'cd /var/www/shopping' \
-    'if [ "${1:-}" = "-it" ]; then' \
-    '    exec bash -i "$$@"' \
-    'else' \
-    '    mkdir -p database && touch database/database.sqlite' \
-    '    php artisan migrate:fresh --seed --force 2>&1' \
-    '    php artisan serve --host=0.0.0.0 --port=8000' \
-    'fi' > /usr/local/bin/docker-entrypoint.sh && \
+    'mkdir -p storage/framework/cache/data' \
+    'mkdir -p database && touch database/database.sqlite' \
+    'php artisan migrate:fresh --seed --force 2>&1' \
+    'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set default command
