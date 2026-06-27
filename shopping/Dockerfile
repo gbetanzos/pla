@@ -65,7 +65,13 @@ elif [ ! -f .env ]; then \
 fi
 
 # Create and initialize storage
-RUN mkdir -p storage/{app,framework/{cache,data,views,sessions},logs,database}
+RUN mkdir -p storage/app
+RUN mkdir -p storage/framework/cache
+RUN mkdir -p storage/framework/data
+RUN mkdir -p storage/framework/views
+RUN mkdir -p storage/framework/sessions
+RUN mkdir -p storage/logs
+RUN mkdir -p storage/database
 
 # Initialize files
 RUN touch storage/logs/laravel.log
