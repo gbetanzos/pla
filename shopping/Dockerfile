@@ -56,13 +56,9 @@ RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
 # Create storage directory first
 RUN mkdir -p storage/app storage/framework storage/logs storage/framework/cache/data storage/framework/storage storage/app/private storage/app/public database 2>/dev/null || true
 
-# Copy and ensure .env exists
+# Copy and ensure .env exists, always generate key
 COPY .env.example .env
-RUN if grep -q "^APP_ENV=production" .env; then \
-    php artisan key:generate --force; \
-elif [ ! -f .env ]; then \
-    cp .env.example .env && php artisan key:generate --force; \
-fi
+RUN php artisan key:generate --force
 
 # Create and initialize storage
 RUN mkdir -p storage/app
@@ -86,14 +82,15 @@ RUN php artisan migrate:fresh --seed --force 2>&1 || true
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/ || exit 1
 
-# Add interactive shell entrypoint with key generation
+# Add interactive shell entrypoint
 RUN printf '%s\n' \
     '#!/bin/sh' \
     'set -e' \
+    'pkill -f "artisan serve" 2>/dev/null || true' \
     'cd /var/www/shopping' \
-    'if [ -f .env ] && ! php artisan env:show 2>/dev/null | grep -q "APP_KEY="; then php artisan key:generate || true; fi' \
-    'mkdir -p storage/framework/cache/data database && touch database/database.sqlite' \
-    'php artisan migrate:fresh --seed --force 2>&1 || true' \
+    'mkdir -p storage/framework/cache/data' \
+    'mkdir -p database && touch database/database.sqlite' \
+    'php artisan migrate:fresh --seed --force 2>&1' \
     'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
