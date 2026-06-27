@@ -1,1 +1,13 @@
-#!/bin/bash\nexit 0
+{
+  "name": "shopping-list-app",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Laravel Shopping List App with Product Catalog",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No frontend build needed'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
