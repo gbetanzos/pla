@@ -76,17 +76,18 @@ RUN php artisan migrate:fresh --seed --force 2>&1 || true
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8000/ || exit 1
 
-# Add interactive shell user and entrypoint
-RUN useradd -m -u 1000 shelluser && \
-    printf '%s\n' \
+# Add interactive shell entrypoint
+RUN printf '%s\n' \
     '#!/bin/sh' \
+    'set -e' \
     'pkill -f "artisan serve" 2>/dev/null || true' \
     'cd /var/www/shopping' \
-    '[ "$1" = "-it" ] && exec bash' \
-    'if [ "$1" = "-it" ]; then exec bash; else' \
-    '  mkdir -p database && touch database/database.sqlite' \
-    '  php artisan migrate:fresh --seed --force 2>&1' \
-    '  php artisan serve --host=0.0.0.0 --port=8000' \
+    'if [ "${1:-}" = "-it" ]; then' \
+    '    exec bash -i "$$@"' \
+    'else' \
+    '    mkdir -p database && touch database/database.sqlite' \
+    '    php artisan migrate:fresh --seed --force 2>&1' \
+    '    php artisan serve --host=0.0.0.0 --port=8000' \
     'fi' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
