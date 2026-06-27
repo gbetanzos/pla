@@ -64,10 +64,14 @@ elif [ ! -f .env ]; then \
     cp .env.example .env && php artisan key:generate --force; \
 fi
 
-# Create all necessary directories
-RUN mkdir -p storage/{app,framework/{cache,data,views,sessions},logs,app/{private,public},database} && \
-    touch storage/logs/laravel.log database/database.sqlite && \
-    chown -R 1000:1000 storage/
+# Create and initialize storage
+RUN mkdir -p storage/{app,framework/{cache,data,views,sessions},logs,database}
+
+# Initialize files
+RUN touch storage/logs/laravel.log
+
+# Set ownership
+RUN chown -R 999:999 storage/
 
 # Run migrations
 RUN php artisan migrate:fresh --seed --force 2>&1 || true
