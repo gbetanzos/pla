@@ -53,22 +53,24 @@ RUN composer install --no-dev --optimize-autoloader
 # Check if .env exists, if not create from example
 RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
 
-# Copy and create .env
-COPY .env.example .env 2>/dev/null || true
-RUN if [ -f .env.example ]; then \
-    cp .env.example .env || true && \
+# Create storage directory first
+RUN mkdir -p storage/app storage/framework storage/logs storage/framework/storage storage/app/private storage/app/public database 2>/dev/null || true
+
+# Copy and ensure .env exists
+COPY .env.example .env
+RUN if grep -q "^APP_ENV=production" .env; then \
     php artisan key:generate --force; \
+elif [ ! -f .env ]; then \
+    cp .env.example .env && php artisan key:generate --force; \
 fi
 
-# Create all necessary storage directories
+# Create all necessary directories
 RUN mkdir -p storage/{app,framework/{cache,data,views,sessions},logs,app/{private,public},database} && \
     touch storage/logs/laravel.log database/database.sqlite && \
     chown -R 1000:1000 storage/
 
-# Run migrations and seed
-RUN if [ -f database/database.sqlite ]; then \
-    php artisan migrate:fresh --seed --force; \
-fi
+# Run migrations
+RUN php artisan migrate:fresh --seed --force 2>&1 || true
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
