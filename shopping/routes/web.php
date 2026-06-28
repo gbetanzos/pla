@@ -46,6 +46,6 @@ Route::get('/login', function () {
         return redirect()->intended('/');
     }
     return view('landing.login-page');
-})->name('admin.login');
+})->name('login');
 
 require __DIR__.'/auth.php';
