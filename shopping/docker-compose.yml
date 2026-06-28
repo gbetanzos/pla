@@ -1,3 +1,27 @@
+# Shopping List App - Docker Compose
+# ===================================
+# Run with:
+#   1. First build: docker-compose build
+#   2. Start: docker-compose up -d
+#   3. View logs: docker-compose logs -f
+#
+# Or start fresh: docker-compose down && docker-compose up --build -d
+#
+# Access app at: http://localhost:8000
+# Product catalog: http://localhost:8000/products
+#
+# Volume mounts:
+#   - .:/var/www/shopping           Local source code (editable)
+#   - /vendor:ro                     FROZEN vendor (read-only)
+#   - /bootstrap/cache               FROZEN cache (read-only)
+#   - /storage/framework/*           FROZEN Laravel framework data (read-only)
+#
+# Environment variables override Laravel config
+# See config/*.php in /var/www/shopping
+#
+# Sessions stored in: /var/www/shopping/storage/framework/sessions
+# Cache stored in:     /var/www/shopping/storage/framework/cache
+#
 version: '3.8'
 
 services:
