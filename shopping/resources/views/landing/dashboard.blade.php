@@ -59,7 +59,7 @@
                                     </h5>
                                 </div>
                                 <div class="card-body p-3">
-                                    <a href="{{ route('shopping-list') }}" class="btn btn-primary me-2">
+                                    <a href="{{ route('shopping-list.index') }}" class="btn btn-primary me-2">
                                         <i class="fa-solid fa-clipboard-list me-1"></i> View All Shopping Lists
                                     </a>
                                     <a href="{{ route('products.index') }}" class="btn btn-outline-primary">

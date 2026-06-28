@@ -17,7 +17,7 @@ Route::get('/dashboard', function () {
        return view('landing.dashboard');
    })->name('dashboard');
 
- Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
 Route::get('/product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.index.edit');
 Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
 Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
@@ -25,6 +25,7 @@ Route::put('/products/{product}', [App\Http\Controllers\ProductController::class
 Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
 
+Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-list.index');
 Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
 Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
 
