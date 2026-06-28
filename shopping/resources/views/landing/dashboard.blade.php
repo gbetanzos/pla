@@ -57,10 +57,10 @@
                 <div class="p-6 text-gray-900">
                     <i class="fa-solid fa-robot text-5xl text-primary mb-4"></i>
                     <h3 class="text-2xl font-bold mb-2">Welcome to Shopping List App</h3>
-                    <p class="text-gray-600 mb-4">Please {{ route('admin.login') ? 'log in' : 'sign up' }} to get started with your shopping lists.</p>
+                    <p class="text-gray-600 mb-4">Please {{ route('login') ? 'log in' : 'sign up' }} to get started with your shopping lists.</p>
                     <div class="flex gap-3">
                         <a href="{{ route('admin.login') }}" class="btn btn-primary">Log In</a>
-                        <a href="{{ App\Models\User::first() ? route('register') : route('admin.login') }}" class="btn btn-outline-primary">Create Account</a>
+                        <a href="{{ App\Models\User::first() ? route('register') : route('login') }}" class="btn btn-outline-primary">Create Account</a>
                     </div>
                 </div>
             </div>
