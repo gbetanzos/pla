@@ -10,6 +10,12 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www/shopping
+      - /var/www/shopping/bootstrap/cache:/var/www/shopping/bootstrap/cache:ro
+      - /var/www/shopping/storage/framework/cache:/var/www/shopping/storage/framework/cache:ro
+      - /var/www/shopping/storage/framework/config:/var/www/shopping/storage/framework/config:ro
+      - /var/www/shopping/storage/framework/sessions:/var/www/shopping/storage/framework/sessions:ro
+      - /var/www/shopping/storage/logs:/var/www/shopping/storage/logs:ro
+      - /var/www/shopping/storage/app/public:/var/www/shopping/storage/app/public:ro
       - /var/www/shopping/vendor:/var/www/shopping/vendor:ro
     environment:
       - APP_ENV=local
