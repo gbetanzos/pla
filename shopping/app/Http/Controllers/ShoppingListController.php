@@ -37,7 +37,7 @@ class ShoppingListController extends Controller
     {
         $list->load('items');
         $items = json_decode($list->items, true) ?? [];
-        return view('admin.shopping-lists.show', ['list' => $list, 'items' => $items]);
+        return view('shopping-lists.show', ['list' => $list, 'items' => $items]);
     }
 
     public function edit(ShoppingList $list)

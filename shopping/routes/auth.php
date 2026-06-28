@@ -62,32 +62,5 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('password', [PasswordController::class, 'update'])->name('password.update');
 
-    // Shopping List Routes (Admin)
-    Route::get('admin/shopping-lists', [ShoppingListController::class, 'index'])
-                ->name('admin.shopping-lists.index');
-
-    Route::get('admin/shopping-list/create', [ShoppingListController::class, 'create'])
-                ->name('admin.shopping-list.create');
-
-    Route::post('admin/shopping-list', [ShoppingListController::class, 'store'])
-                ->name('admin.shopping-list.store');
-
-    Route::get('admin/shopping-list/{list}', [ShoppingListController::class, 'show'])
-                ->name('admin.shopping-list.show');
-
-    Route::get('admin/shopping-list/{list}/edit', [ShoppingListController::class, 'edit'])
-                ->name('admin.shopping-list.edit');
-
-    Route::put('admin/shopping-list/{list}', [ShoppingListController::class, 'update'])
-                ->name('admin.shopping-list.update');
-
-    Route::post('admin/shopping-list/{list}/toggle', [ShoppingListController::class, 'toggle'])
-                ->name('admin.shopping-list.toggle')
-                ->middleware(['throttle:60,1']);
-
-    Route::post('admin/shopping-list/{list}/mark-complete', [ShoppingListController::class, 'markComplete'])
-                ->name('admin.shopping-list.mark-complete');
-
-    Route::delete('admin/shopping-list/{list}', [ShoppingListController::class, 'destroy'])
-                ->name('admin.shopping-list.destroy');
+    // All routes are in web.php
 });

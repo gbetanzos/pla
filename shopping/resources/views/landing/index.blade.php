@@ -39,7 +39,7 @@
                             <div class="card shadow-sm border-0 {{ $list->is_completed ? 'border-start-4 border-success bg-light' : '' }} p-3">
                                 <div class="d-flex justify-content-between align-items-start gap-3">
                                     <div class="flex-grow-1">
-                                        <a href="{{ route('admin.shopping-list.show', $list->id) }}" class="text-decoration-none">
+                                        <a href="{{ route('shopping-lists.show', $list->id) }}" class="text-decoration-none">
                                             <h5 class="card-title fw-bold mb-1 {{ $list->is_completed ? 'text-success' : 'text-dark' }}">
                                                 <i class="fa-solid fa-clipboard text-success me-2"></i>{{ $list->title }}
                                             </h5>
@@ -73,7 +73,7 @@
 
                 <!-- Create Button -->
                 <div class="text-center mt-4">
-                    <a href="{{ route('admin.shopping-list.create') }}" class="btn btn-primary btn-lg">
+                    <a href="{{ route('shopping-list.create') }}" class="btn btn-primary btn-lg">
                         <i class="fa-solid fa-plus me-2"></i>Create New Shopping List
                     </a>
                 </div>
