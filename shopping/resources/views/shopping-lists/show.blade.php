@@ -10,7 +10,7 @@
 @endphp
 
 <div class="card {{ $isCompleted ? 'bg-light' : '' }}" 
-     style="border-left: 4px solid {{ $list->priority === 'high' ? '#dc3545' : ($list->priority === 'medium' ? '#ffc107' : '#28a745') }}">
+      style="border-left: 4px solid {{ ($list->priority === 'high') ? '#dc3545' : (($list->priority === 'medium') ? '#ffc107' : '#28a745') }}">
     <div class="card-header bg-transparent text-muted">
         <h2 class="mb-0">
             @if($list->items && !($list->items->pluck('checked')->contains(false)))

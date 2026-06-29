@@ -47,7 +47,7 @@
                                                 @if($list->is_completed)
                                                     <i class="fa-solid fa-check me-1"></i>Complete
                                                 @else
-                                                    <span class="badge {{ $list->priority == 'high' ? 'bg-danger' : $list->priority == 'medium' ? 'bg-warning text-dark' : 'bg-success' }} ms-1">{{ ucfirst($list->priority) }} Priority</span>
+                                                    <span class="badge {{ ($list->priority == 'high') ? 'bg-danger' : (($list->priority == 'medium') ? 'bg-warning text-dark' : 'bg-success') }} ms-1">{{ ucfirst($list->priority) }} Priority</span>
                                                 @endif
                                             </p>
                                             @if($list->description)
