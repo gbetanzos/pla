@@ -7,12 +7,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">My Shopping Lists</h2>
 
-        <div class="d-flex gap-2">
+<div class="d-flex gap-2">
             <a href="{{ route('shopping-list.create') }}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Create List
             </a>
-            <a href="{{ route('shopping-list.sort', ['sort' => 'due']) }}"
-               class="btn btn-outline-primary" title="Show due first">
+            <a href="#" onclick="alert('Sorting feature coming soon')" class="btn btn-outline-primary">
                 <i class="far fa-calendar-alt"></i>
             </a>
         </div>
