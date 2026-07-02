@@ -14,7 +14,7 @@
             <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary me-2">
                 <i class="fa-solid fa-house me-1"></i>Dashboard
             </a>
-            <a href="{{ route('shopping-list.index') }}" class="btn btn-outline-secondary me-2">
+            <a href="{{ route('shopping-lists.index') }}" class="btn btn-outline-secondary me-2">
                 <i class="fa-solid fa-clipboard-list me-1"></i>Lists
             </a>
             <a href="{{ route('products.index') }}" class="btn btn-outline-secondary me-2">

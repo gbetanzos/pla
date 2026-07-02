@@ -55,7 +55,7 @@
 
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2">
-                            <a href="{{ route('shopping-list.index') }}" class="btn btn-primary btn-lg">
+                            <a href="{{ route('shopping-lists.index') }}" class="btn btn-primary btn-lg">
                                 <i class="fa-solid fa-clipboard-list me-2"></i> View All Shopping Lists
                             </a>
                             <a href="{{ route('products.index') }}" class="btn btn-outline-primary btn-lg">
