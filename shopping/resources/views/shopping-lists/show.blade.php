@@ -29,7 +29,7 @@
                 <small class="text-muted ms-2" title="Due Date">Due: {{ $list->due_date->format('M d, Y') }}</small>
             @endif
         </h2>
-        <form method="POST" action="{{ route('shopping-list.mark-complete', $list) }}" 
+        <form method="POST" action="{{ route('shopping-lists.mark-complete', $list) }}"
               style="display: inline;">
             @csrf
             <button type="submit" 
@@ -50,10 +50,10 @@
     </div>
     
     <div class="card-footer bg-transparent">
-        <a href="{{ route('shopping-list.edit', $list) }}" class="btn btn-primary btn-sm">
+        <a href="{{ route('shopping-lists.edit', $list) }}" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-pen"></i> Edit
         </a>
-        <form method="POST" action="{{ route('shopping-list.destroy', $list) }}" data-confirm="true" 
+        <form method="POST" action="{{ route('shopping-lists.destroy', $list) }}" data-confirm="true"
               style="display: inline;">
             @csrf
             <button type="submit" class="btn btn-danger btn-sm">
@@ -76,14 +76,14 @@
                 
                 if (!productId) return;
                 
-                fetch('/shopping-list/{{ $list->id }}/toggle', {
+                fetch(`/shopping-list/${productId}/toggle-item`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
                     body: JSON.stringify({
-                        product_id: productId,
+                        item_id: productId,
                         checked: checked
                     })
                 }).then(res => res.json()).then(data => {

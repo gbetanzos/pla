@@ -25,16 +25,30 @@ Route::put('/products/{product}', [App\Http\Controllers\ProductController::class
 Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
 
-Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
-Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
-Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
+    Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
+    Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
+    Route::put('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'update'])->name('shopping-lists.update')->where('id', '[0-9]+');
+    Route::delete('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy')->where('id', '[0-9]+');
+    Route::post('/shopping-list/{list}/toggle-item', [App\Http\Controllers\ShoppingListController::class, 'toggleItem'])->name('shopping-lists.toggle-item')->where('id', '[0-9]+');
+    Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
+});
 
-// Additional aliases for routes used in views
+Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
 Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
-Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
-Route::put('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'update'])->name('shopping-lists.update')->where('id', '[0-9]+');
-Route::delete('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy')->where('id', '[0-9]+');
-Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
+
+// Product mutation routes require auth
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
+});
+
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
 
 // Profile routes (Laravel scaffolding)
 Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
