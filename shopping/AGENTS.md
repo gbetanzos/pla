@@ -1,6 +1,6 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sat Jun 22 2026 08:00 UTC
+Last Updated: Sat Jul 04 2026 12:00 UTC
 
 ## ✅ Completed Features
 
@@ -54,12 +54,16 @@ Last Updated: Sat Jun 22 2026 08:00 UTC
   - edit.blade.php - edit list form
   - confirm.blade.php - delete confirmation
 
-## 🔄 Completed in Latest Session
+## 🔄 Completed in Latest Session (Jul 4 2026)
 
-### Latest Updates (Jun 22 07:25 UTC)
-- Changed show() view reference from 'shopping-lists.show' to 'admin.shopping-lists.show'
-- Created admin directory: resources/views/admin/shopping-lists/show.blade.php
-- Added smart checkbox logic: first checkbox auto-shows/hides based on item state
+### Bulk Bug Audit & Fix
+- **#2**: Fixed raw PHP syntax in `shopping-lists/index.blade.php` — replaced `((...))` expressions with proper `@php` blocks (`$listBgColor`, `$priorityColor`)
+- **#3**: Created missing `products/create.blade.php` view (matching edit form pattern)
+- **#4**: Created missing `products/show.blade.php` view (product detail with Edit/Delete actions)
+- **#5**: Fixed toggle-item JS in `shopping-lists/show.blade.php` — was using product ID as list ID in fetch URL, now uses `{{ $list->id }}`
+- **#6**: Fixed route name mismatches in views: `shopping-list.index` → `shopping-lists.index`, `shopping-list.update` → `shopping-lists.update` (`edit.blade.php`)
+- **#7**: Removed duplicate product routes from `web.php` (lines 20-26 were redundant, auth-guarded block at lines 33-40 handles everything)
+- **#8**: Removed `$list->load('items')` in `ShoppingListController@show` — `items` is a JSON column, not an Eloquent relationship
 
 ### Bug Fix: Auth Error
 - Fixed "Attempt to read property 'id' on null" error in ShoppingListController@store
@@ -77,6 +81,13 @@ Last Updated: Sat Jun 22 2026 08:00 UTC
 - Added `GET mark-complete` route
 - UI button displays only when list not complete
 - Visual badge (✓) on completed lists
+
+## 📌 Still Pending
+- **#9**: Product model missing `$fillable` — `Product::create()` will throw MassAssignmentException
+- **#10**: ShoppingList has `public $fillable` — should be `protected $fillable` or use `$guarded = []`
+- **#11**: Sorting button in index page shows dead alert dialog
+- **#12**: Product index filter form sends search/priority params, but controller ignores them
+- **vendor/**: Missing — `composer install` never run
 
 ## 🚫 Removed
 - `$fillable` properties from models (Laravel 11 uses static assignment)
