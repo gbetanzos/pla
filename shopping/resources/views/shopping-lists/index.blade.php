@@ -11,9 +11,14 @@
             <a href="{{ route('shopping-list.create') }}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Create List
             </a>
-            <a href="#" onclick="alert('Sorting feature coming soon')" class="btn btn-outline-primary">
-                <i class="far fa-calendar-alt"></i>
-            </a>
+            <form method="GET" action="{{ route('shopping-lists.index') }}" class="d-flex align-items-center gap-2 mb-0">
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+                    <option value="newest" {{ request('sort') == 'newest' || !request('sort') ? 'selected' : '' }}>Newest</option>
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                    <option value="priority" {{ request('sort') == 'priority' ? 'selected' : '' }}>Priority</option>
+                    <option value="due_date" {{ request('sort') == 'due_date' ? 'selected' : '' }}>Due Date</option>
+                </select>
+            </form>
         </div>
     </div>
 

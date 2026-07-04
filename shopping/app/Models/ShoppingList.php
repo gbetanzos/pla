@@ -9,7 +9,7 @@ class ShoppingList extends Model
 {
     use HasFactory;
 
-    public $fillable = [
+    protected $fillable = [
         'user_id',
         'title',
         'description',

@@ -9,7 +9,25 @@ class ShoppingListController extends Controller
 {
     public function index()
     {
-        $lists = ShoppingList::orderBy('created_at', 'desc')->get();
+        $query = ShoppingList::query();
+
+        switch (request('sort', 'newest')) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'priority':
+                $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
+                break;
+            case 'due_date':
+                $query->orderBy('due_date', 'asc')->whereNotNull('due_date')->union(
+                    ShoppingList::whereNull('due_date')->orderBy('created_at', 'desc')
+                );
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+        }
+
+        $lists = $query->get();
         return view('shopping-lists.index', ['lists' => $lists]);
     }
 
