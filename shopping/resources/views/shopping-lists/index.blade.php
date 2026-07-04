@@ -20,10 +20,14 @@
     <div class="shopping-lists-grid"
          style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
         @foreach($lists as $list)
-            <a href="{{ route('shopping-list.show', $list) }}"
+@php
+    $listBgColor = $list->is_completed ? '#f8f9fa' : 'white';
+    $priorityColor = $list->priority === 'high' ? '#dc3545' : ($list->priority === 'medium' ? '#ffc107' : '#28a745');
+@endphp
+
+            <a href="{{ route('shopping-lists.show', $list) }}"
                class="card shadow-sm border-0 h-100"
-style="background: {{ $list->is_completed ? '#f8f9fa' : 'white' }}, border-left: 8px solid {
-                    (($list->priority === 'high') ? '#dc3545' : (($list->priority === 'medium') ? '#ffc107' : '#28a745'))}, transition: transform 0.2s ease; display: flex; flex-direction: column;">
+style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor }}; transition: transform 0.2s ease; display: flex; flex-direction: column;">
                 <div style="flex: 1; padding: 20px; position: relative;">
                     <h3 class="mb-2" style="font-size: 18px; line-height: 1.4;">
                         {{ $list->title }}
@@ -38,8 +42,8 @@ style="background: {{ $list->is_completed ? '#f8f9fa' : 'white' }}, border-left:
 
                     <div class="d-flex flex-wrap gap-2 mt-auto">
                         @if($list->priority)
-<span class="badge rounded-pill"
-                       style="background: ((($list->priority === 'high') ? '#dc3545' : (($list->priority === 'medium') ? '#ffc107' : '#28a745'))); color: #212529;">
+                            <span class="badge rounded-pill"
+                                  style="background: {{ $priorityColor }}; color: #212529;">
                                 <i class="fas fa-flag"></i> {{ ucfirst($list->priority) }}
                             </span>
                         @endif

@@ -13,19 +13,11 @@ use Illuminate\Support\Facades\Route;
           ->append('path', request()->previousUrl)]);
   })->name('landing');
 
-Route::get('/dashboard', function () {
-       return view('landing.dashboard');
-   })->name('dashboard');
+ Route::get('/dashboard', function () {
+        return view('landing.dashboard');
+    })->name('dashboard');
 
-Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
-Route::get('/product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.index.edit');
-Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
-Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
-Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
-Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
-Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
-
-Route::middleware(['auth'])->group(function () {
+ Route::middleware(['auth'])->group(function () {
     Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
     Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
     Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');

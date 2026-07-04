@@ -4,12 +4,12 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Edit Shopping List</h2>
 
-    <a href="{{ route('shopping-list.index') }}" class="btn btn-outline-secondary">
+    <a href="{{ route('shopping-lists.index') }}" class="btn btn-outline-secondary">
         <i class="fas fa-arrow-left"></i> Cancel
     </a>
 </div>
 
-<form action="{{ route('shopping-list.update', $list) }}" method="POST"
+<form action="{{ route('shopping-lists.update', $list) }}" method="POST"
       class="card shadow-sm border-0"
       style="padding: 30px; background: #f8f9fa;">
     @csrf

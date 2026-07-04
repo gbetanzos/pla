@@ -76,7 +76,7 @@
                 
                 if (!productId) return;
                 
-                fetch(`/shopping-list/${productId}/toggle-item`, {
+                fetch(`/shopping-list/{{ $list->id }}/toggle-item`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
