@@ -2,27 +2,71 @@
 
 @section('title', 'Login')
 @section('content')
-<div style="max-width: 600px; margin: 40px auto; padding: 30px;">
-    <h1 style="margin-bottom: 10px;">Welcome</h1>
-    <p style="color: #666; margin-bottom: 30px;">This is a simple shopping list app. No login required.</p>
-    
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; border-left: 4px solid #28a745;">
-        <h3 style="margin-top: 0;">Getting Started</h3>
-        <ol style="padding-left: 20px;">
-            <li>Create a new shopping list</li>
-            <li>Add products from the catalog</li>
-            <li>Check items off as you shop</li>
-        </ol>
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+        <!-- Hero -->
+        <div class="text-center mb-5">
+            <div class="mb-3">
+                <i class="fa-solid fa-basket-shopping fa-4x text-primary"></i>
+            </div>
+            <h1 class="display-6 fw-bold text-dark mb-2">Shopping Lists</h1>
+            <p class="text-muted fs-5">Organize your groceries, one list at a time.</p>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <i class="fa-solid fa-clipboard-list fa-2x text-primary mb-3"></i>
+                    <h5 class="fw-bold">Create Lists</h5>
+                    <p class="text-muted mb-0 small">Build shopping lists with titles, priorities, and due dates.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <i class="fa-solid fa-cart-plus fa-2x text-success mb-3"></i>
+                    <h5 class="fw-bold">Add Products</h5>
+                    <p class="text-muted mb-0 small">Pick items from your product catalog or add new ones.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <i class="fa-solid fa-circle-check fa-2x text-warning mb-3"></i>
+                    <h5 class="fw-bold">Check Off Items</h5>
+                    <p class="text-muted mb-0 small">Mark items as you shop and track your progress.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="card border-0 shadow-sm p-4 text-center bg-light rounded-3">
+            <h5 class="fw-bold mb-1">Ready to start?</h5>
+            <p class="text-muted mb-4 small">Sign in to manage your lists or jump right in.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{{ route('shopping-list.create') }}"
+                   class="btn btn-primary btn-lg px-4">
+                    <i class="fa-solid fa-plus me-2"></i>Create Your First List
+                </a>
+                <a href="{{ route('landing') }}"
+                   class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fa-solid fa-list me-2"></i>View All Lists
+                </a>
+            </div>
+
+            <!-- Login / Register -->
+            <hr class="my-4">
+            <p class="text-muted small mb-3">Already have an account?</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-right-to-bracket me-1"></i>Log In
+                </a>
+                @if(route('register'))
+                <a href="{{ route('register') }}" class="btn btn-outline-success">
+                    <i class="fa-solid fa-user-plus me-1"></i>Sign Up
+                </a>
+                @endif
+            </div>
+        </div>
     </div>
-    
-    <a href="{{ route('shopping-list.create') }}" 
-       class="btn btn-primary" 
-       style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 5px; margin-top: 30px; text-decoration: none; color: white;">
-        + Create Your First Shopping List
-    </a>
-    
-    <p style="margin-top: 30px; color: #999; font-size: 13px;">
-        Already have lists? <a href="{{ route('landing') }}">View all shopping lists</a>
-    </p>
 </div>
 @endsection
