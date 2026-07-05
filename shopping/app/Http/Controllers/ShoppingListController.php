@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Http\Request;
 
@@ -31,50 +32,80 @@ class ShoppingListController extends Controller
         return view('shopping-lists.index', ['lists' => $lists]);
     }
 
-    public function create()
-    {
-        return view('shopping-lists.create');
-    }
-
     public function store(Request $request)
     {
         $user = $request->user() ?? abort(401);
-        
-        ShoppingList::create([
+
+        $data = [
             'user_id' => $user->id,
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
             'due_date' => $request->due_date,
             'notes' => $request->notes,
-        ]);
+        ];
+
+        if ($request->has('product_ids')) {
+            $items = [];
+            foreach ((array)$request->product_ids as $productId) {
+                $items[] = ['product_id' => (int)$productId, 'checked' => false];
+            }
+            $data['items'] = json_encode($items);
+        }
+
+        ShoppingList::create($data);
         return redirect()->route('shopping-lists.index')->with('success', 'Shopping list created.');
     }
 
     public function show(ShoppingList $list)
     {
-        $items = $list->items ?? [];
-        return view('shopping-lists.show', ['list' => $list, 'items' => $items]);
+        $products = Product::all();
+        return view('shopping-lists.show', ['list' => $list, 'products' => $products]);
+    }
+
+    public function create()
+    {
+        $products = Product::all();
+        return view('shopping-lists.create', ['products' => $products]);
     }
 
     public function edit(ShoppingList $list)
     {
-        return view('shopping-lists.edit', ['list' => $list]);
+        $products = Product::all();
+        return view('shopping-lists.edit', ['list' => $list, 'products' => $products]);
     }
 
     public function update(Request $request, ShoppingList $list)
     {
         $data = $request->only(['title', 'description', 'priority', 'due_date', 'notes']);
-        
-        if ($request->has('items')) {
-            $updatedItems = [];
-            foreach ($request->items as $itemId => $item) {
-                $updatedItems[] = [
-                    'product_id' => $item['product_id'] ?? null,
-                    'checked' => $item['checked'] ?? false,
-                ];
+
+        if ($request->has('product_ids')) {
+            $productIds = (array)$request->product_ids;
+            $items = json_decode($list->items, true) ?: [];
+            
+            foreach ($items as &$item) {
+                $item['checked'] = false;
             }
-            $data['items'] = json_encode($updatedItems);
+            
+            $newItems = [];
+            foreach ($productIds as $productId) {
+                $productId = (int)$productId;
+                $alreadyExists = false;
+                foreach ($items as $idx => $item) {
+                    if ((int)$item['product_id'] === $productId) {
+                        $newItems[$idx] = $item;
+                        $alreadyExists = true;
+                    } else {
+                        unset($items[$idx]);
+                    }
+                }
+                if (!$alreadyExists) {
+                    $items[] = ['product_id' => $productId, 'checked' => false];
+                    $newItems[key($items)] = end($items);
+                }
+            }
+            
+            $data['items'] = json_encode(array_values($items));
         }
 
         $list->update($data);
@@ -113,7 +144,44 @@ class ShoppingListController extends Controller
         $list->is_completed = true;
         $list->completed_at = now();
         $list->save();
-        
+
         return redirect()->route('shopping-lists.show', $list);
+    }
+
+    public function addItem(Request $request, ShoppingList $list)
+    {
+        $productIds = $request->filled('product_ids')
+            ? (array)$request->product_ids
+            : (is_array($request->product_id) ? $request->product_id : [$request->product_id]);
+
+        if (empty($productIds)) {
+            return response()->json(['error' => 'No product specified'], 400);
+        }
+
+        $items = json_decode($list->items, true) ?: [];
+
+        foreach ($productIds as $productId) {
+            $productId = (int)$productId;
+            $alreadyExists = false;
+            foreach ($items as $item) {
+                if ((int)$item['product_id'] === $productId) {
+                    $alreadyExists = true;
+                    break;
+                }
+            }
+            if (!$alreadyExists) {
+                $items[] = ['product_id' => $productId, 'checked' => false];
+            }
+        }
+
+        $list->items = json_encode($items);
+        $list->save();
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'count' => count($items)]);
+        }
+
+        return redirect()->route('shopping-lists.show', $list)
+            ->with('success', count($productIds) . ' product(s) added.');
     }
 }

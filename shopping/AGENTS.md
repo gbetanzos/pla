@@ -1,6 +1,26 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sat Jul 04 2026 12:00 UTC
+Last Updated: Sun Jul 05 2026 17:00 UTC
+
+## 🔄 Completed in Latest Session (Jul 5 2026)
+
+### Add Products to Shopping List — Controller Fixes
+- **#13**: Added `addItem()` method to `ShoppingListController` — was missing despite route definition at `web.php:28`
+- **#14**: Fixed `store()` to accept `product_ids[]` and persist items on list creation (was ignored)
+- **#15**: Rewrote `update()` to properly reconcile submitted product IDs with existing items JSON column
+- **#16**: Passed `$products` from Product model into `show`, `create`, and `edit` views
+- Added `POST /shopping-list/{list}/add-item` route (auth-guarded) → `ShoppingListController@addItem`
+
+### Composer Install
+- Ran `composer install` — vendor/ was missing, 106 packages installed
+
+### Pending for Next Session
+- **#17**: `create.blade.php` has no product checkboxes in the form — needs UI to select products during list creation
+- **#18**: `show.blade.php` never renders the items list — displays metadata only, no product rows visible
+- **#19**: `edit.blade.php` line 68-70 uses a broken hidden `<input>` with malformed JSON instead of real checkboxes
+
+### Git Sync
+- Pulled latest: `.env.example` SESSION_DRIVER changed from `file` → `database`, simplified MySQL/MariaDB SSL config in `config/database.php`
 
 ## ✅ Completed Features
 
@@ -23,7 +43,7 @@ Last Updated: Sat Jul 04 2026 12:00 UTC
 
 ### Controllers
 - **ProductController**: index, create, store, edit, update, destroy
-- **ShoppingListController**: index, create, store, show, edit, update, toggle, markComplete, destroy
+- **ShoppingListController**: index, create, store, show, edit, update, toggleItem, addItem, markComplete, destroy
 
 ### Routes
 - Products: 
@@ -36,7 +56,8 @@ Last Updated: Sat Jul 04 2026 12:00 UTC
   - POST /shopping-list (store)
   - GET /shopping-list/{list} (show), /shopping-list/{list}/edit (edit form)
   - PUT /shopping-list/{list} (update)
-  - POST /shopping-list/{list}/toggle (toggle item checkbox)
+  - POST /shopping-list/{list}/toggle-item (toggle item checkbox)
+  - POST /shopping-list/{list}/add-item (add product(s) to list)
   - POST /shopping-list/{list}/mark-complete (mark complete)
   - DELETE /shopping-list/{list} (destroy)
 - Home: GET / (paginated list with items loaded)
@@ -87,7 +108,6 @@ Last Updated: Sat Jul 04 2026 12:00 UTC
 - **#10**: ShoppingList has `public $fillable` — should be `protected $fillable` or use `$guarded = []`
 - **#11**: Sorting button in index page shows dead alert dialog
 - **#12**: Product index filter form sends search/priority params, but controller ignores them
-- **vendor/**: Missing — `composer install` never run
 
 ## 🚫 Removed
 - `$fillable` properties from models (Laravel 11 uses static assignment)
