@@ -89,9 +89,7 @@ RUN printf '%s\n' \
     'pkill -f "artisan serve" 2>/dev/null || true' \
     'cd /var/www/shopping' \
     'mkdir -p storage/framework/cache/data' \
-    'mkdir -p database && touch database/database.sqlite' \
-    'php artisan migrate:fresh --seed --force 2>&1' \
-    'php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
+    'php artisan migrate:fresh --seed --force 2>&1 ; php artisan serve --host=0.0.0.0 --port=8000' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set default command

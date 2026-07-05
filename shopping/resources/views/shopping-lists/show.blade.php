@@ -4,8 +4,8 @@
 @php
     $isCompleted = $list->is_completed || ($list->items && !($list->items->pluck('checked')->contains(false)));
     $bgColor = $isCompleted ? '#f0f0f0' : (
-        $list->priority === 'high' ? '#fdf2f2' :
-        $list->priority === 'medium' ? '#fdf6e3' : '#eafaf1'
+        ($list->priority === 'high') ? '#fdf2f2' : 
+        (($list->priority === 'medium') ? '#fdf6e3' : '#eafaf1')
     );
 @endphp
 

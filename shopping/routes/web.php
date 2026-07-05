@@ -47,12 +47,4 @@ Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edi
 Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 
-// Simple login redirect (first page after login)
-Route::get('/login', function () {
-    if(session()->has('user')) {
-        return redirect()->intended('/');
-    }
-    return view('landing.login-page');
-})->name('login');
-
 require __DIR__.'/auth.php';
