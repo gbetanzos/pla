@@ -64,7 +64,7 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
                         @endif
 
                         @if($list->due_date)
-                            @if($list->due_date->isPastNow())
+                            @if($list->due_date->isPast())
                                 <span class="badge bg-danger rounded-pill">
                                     <i class="fas fa-exclamation-triangle"></i>
                                     Due: {{ $list->due_date->format('M d, Y') }}
