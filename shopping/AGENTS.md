@@ -1,8 +1,8 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sun Jul 05 2026 17:00 UTC
+Last Updated: Mon Jul 06 2026 12:00 UTC
 
-## 🔄 Completed in Latest Session (Jul 5 2026)
+## 🔄 Completed in Latest Session (Jul 6 2026)
 
 ### Add Products to Shopping List — Controller Fixes
 - **#13**: Added `addItem()` method to `ShoppingListController` — was missing despite route definition at `web.php:28`
@@ -14,8 +14,10 @@ Last Updated: Sun Jul 05 2026 17:00 UTC
 ### Composer Install
 - Ran `composer install` — vendor/ was missing, 106 packages installed
 
+### View Fixes
+- **#17**: `create.blade.php` now has product checkboxes in the form to select products during list creation
+
 ### Pending for Next Session
-- **#17**: `create.blade.php` has no product checkboxes in the form — needs UI to select products during list creation
 - **#18**: `show.blade.php` never renders the items list — displays metadata only, no product rows visible
 - **#19**: `edit.blade.php` line 68-70 uses a broken hidden `<input>` with malformed JSON instead of real checkboxes
 
