@@ -43,12 +43,30 @@
             <button type="submit" class="btn btn-success w-100">Create List</button>
         </div>
     </div>
+
+    @if($products->count())
+    <div class="mt-4">
+        <label class="form-label fw-bold"><i class="fa-solid fa-box-open me-1"></i>Select Products (optional)</label>
+        <div style="max-height: 300px; overflow-y: auto; border: 2px solid #dee2e6; border-radius: 8px; padding: 15px;">
+            @foreach($products as $product)
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="product_ids[]" value="{{ $product->id }}" id="prod_{{ $product->id }}">
+                    <label class="form-check-label" for="prod_{{ $product->id }}">
+                        <strong>{{ $product->name }}</strong>
+                        @if($product->brand)
+                            <small class="text-muted ms-1">({{ $product->brand }})</small>
+                        @endif
+                    </label>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 </form>
 
 @if(session('error'))
 <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
     {{ session('error') }}
-
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
