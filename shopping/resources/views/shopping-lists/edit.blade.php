@@ -57,17 +57,35 @@
 
     <div class="mt-4">
         <label class="form-label fw-bold">Items</label>
-        <div class="items-container"
-             id="items-container"
-             style="padding: 20px; border: 2px dashed #dee2e6; border-radius: 8px; text-align: center; cursor: pointer;"
-             onclick="document.getElementById('items-select').click()">
-            <i class="fas fa-plus-circle text-info fa-2x"></i>
-            <p class="text-muted mt-2">Click anywhere here to add items from catalog</p>
+        <p class="text-muted mb-2"><small>Select which products belong on this list:</small></p>
+        @php
+            $currentItems = $list->items ?? [];
+        @endphp
+        @if($products->count())
+        <div style="max-height: 300px; overflow-y: auto; border: 2px solid #dee2e6; border-radius: 8px; padding: 15px;">
+            @foreach($products as $product)
+                @php
+                    $isChecked = false;
+                    foreach ($currentItems as $item) {
+                        if ((int)$item['product_id'] === (int)$product->id) {
+                            $isChecked = true;
+                            break;
+                        }
+                    }
+                @endphp
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="product_ids[]" value="{{ $product->id }}"
+                           id="edit_prod_{{ $product->id }}" {{ $isChecked ? 'checked' : '' }}>
+                    <label class="form-check-label" for="edit_prod_{{ $product->id }}">
+                        <strong>{{ $product->name }}</strong>
+                        @if($product->brand)
+                            <small class="text-muted ms-1">({{ $product->brand }})</small>
+                        @endif
+                    </label>
+                </div>
+            @endforeach
         </div>
-
-        <input type="hidden" name="items[]"
-               id="items-select"
-               value='{{ json_encode($list->items ? (json_decode($list->items, true) ?? []) : []) }}">
+        @endif
     </div>
 
     <div class="d-flex gap-2 mt-4 pt-2 border-top">

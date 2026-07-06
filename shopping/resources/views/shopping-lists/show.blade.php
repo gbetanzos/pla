@@ -49,6 +49,35 @@
         @endif
     </div>
     
+    @if($list->items && count($list->items) > 0)
+    <div class="card-body">
+        <h5 class="mb-3"><i class="fa-solid fa-list-check me-1"></i> Items ({{ $list->completed_percentage }})</h5>
+        <div class="list-group">
+            @foreach($list->items as $index => $item)
+                @php
+                    $product = $products->firstWhere('id', $item['product_id']);
+                @endphp
+                <div class="list-group-item d-flex align-items-center items-list-item {{ $item['checked'] ? 'completed' : '' }}"
+                     style="{{ $item['checked'] ? 'opacity: 0.6; background: #f8f9fa;' : '' }}">
+                    <input class="form-check-input me-3 items-list-item-checkbox" type="checkbox"
+                           data-product-id="{{ $item['product_id'] }}"
+                           {{ $item['checked'] ? 'checked' : '' }}>
+                    <div class="flex-grow-1">
+                        <strong>{{ $product ? $product->name : 'Unknown Product' }}</strong>
+                        @if($product && $product->brand)
+                            <br><small class="text-muted">{{ $product->brand }}</small>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @else
+    <div class="card-body text-center">
+        <p class="text-muted mb-0"><i class="fa-solid fa-inbox me-1"></i> No items on this list yet</p>
+    </div>
+    @endif
+
     <div class="card-footer bg-transparent">
         <a href="{{ route('shopping-lists.edit', $list) }}" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-pen"></i> Edit
