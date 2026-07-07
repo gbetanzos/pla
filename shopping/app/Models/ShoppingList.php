@@ -45,7 +45,7 @@ class ShoppingList extends Model
 
     public function completeItems(array $checkedItemIndices)
     {
-        $items = $this->items ?: [];
+        $items = is_array($this->items) ? $this->items : [];
         $updatedItems = [];
         foreach ($items as $index => $item) {
             if (isset($checkedItemIndices[$index])) {
@@ -58,8 +58,11 @@ class ShoppingList extends Model
 
     public function getCompletedPercentageAttribute()
     {
-        $items = $this->items ?: [];
-        $checked = collect($items)->filter(fn($item) => $item['checked'] ?? false)->count();
-        return $items ? (int)round($checked / count($items) * 100) . '%' : 0 . '%';
+        $items = is_array($this->items) ? $this->items : [];
+        if (empty($items)) {
+            return '0%';
+        }
+        $checked = collect($items)->filter(fn($i) => $i['checked'] ?? false)->count();
+        return (int)round($checked / count($items) * 100) . '%';
     }
 }

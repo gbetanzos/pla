@@ -57,9 +57,9 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
                             <span class="badge bg-success rounded-pill">
                                 <i class="fas fa-check-circle"></i> Complete
                             </span>
-                        @elseif($list->items)
+                        @elseif(is_array($list->items) && count($list->items) > 0)
                             <span class="badge bg-secondary rounded-pill">
-                                <i class="fas fa-list-ul"></i> {{ json_decode($list->items, true) ? count(json_decode($list->items, true)) : 0 }} items
+                                <i class="fas fa-list-ul"></i> {{ count($list->items) }} items
                             </span>
                         @endif
 

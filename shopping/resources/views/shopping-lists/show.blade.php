@@ -2,7 +2,7 @@
 
 @section('content')
 @php
-    $isCompleted = $list->is_completed || ($list->items && !($list->items->pluck('checked')->contains(false)));
+    $isCompleted = $list->is_completed || (is_array($list->items) && count($list->items) > 0 && !collect($list->items)->pluck('checked')->contains(false));
     $bgColor = $isCompleted ? '#f0f0f0' : (
         ($list->priority === 'high') ? '#fdf2f2' : 
         (($list->priority === 'medium') ? '#fdf6e3' : '#eafaf1')
@@ -13,7 +13,7 @@
       style="border-left: 4px solid {{ ($list->priority === 'high') ? '#dc3545' : (($list->priority === 'medium') ? '#ffc107' : '#28a745') }}">
     <div class="card-header bg-transparent text-muted">
         <h2 class="mb-0">
-            @if($list->items && !($list->items->pluck('checked')->contains(false)))
+            @if(is_array($list->items) && count($list->items) > 0 && !collect($list->items)->pluck('checked')->contains(false))
                 <i class="fa-solid fa-check-circle text-success me-2"></i>
             @endif
             {{ $list->title }}
