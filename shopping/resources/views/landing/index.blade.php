@@ -59,7 +59,7 @@
                                 </div>
                                 @if($list->due_date)
                                 <div class="mt-2 text-end text-muted">
-                                    @if(\Carbon\Carbon::parse($list->due_date)->isPast)
+                                    @if(\Carbon\Carbon::parse($list->due_date)->isPast())
                                         <span class="text-danger">Overdue!</span>
                                     @else
                                         <i class="fa-solid fa-calendar me-1"></i>Due: {{ \Carbon\Carbon::parse($list->due_date)->format('M d, Y') }}
