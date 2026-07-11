@@ -38,5 +38,7 @@
         </div>
     </form>
 
-    <div class="text-center mt-3"><p class="text-muted small mb-0">Don't have an account?@if(route('register')) <a href="{{ route('register') }}" class="text-decoration-none fw-bold text-primary">Sign Up</a>@endif</p></div>
+    {{--
+        <div class="text-center mt-3"><p class="text-muted small mb-0">Don't have an account?@if(route('register')) <a href="{{ route('register') }}" class="text-decoration-none fw-bold text-primary">Sign Up</a>@endif</p></div>
+    --}}
 </x-guest-layout>
