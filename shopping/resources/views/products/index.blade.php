@@ -32,6 +32,12 @@
         <a href="{{ route('products.create') }}" class="btn btn-success mb-3">
             <i class="fa-solid fa-plus me-1"></i> Add Product
         </a>
+        @auth
+        <button type="button" class="btn btn-outline-primary mb-3" data-bs-toggle="collapse" data-bs-target="#productModificationMenu">
+             <i class="fa-solid fa-gear me-1"></i> Modify Products
+           </button>
+          <!-- Optional: Add a dropdown/modal content area here if complex actions are needed -->
+        @endauth
         
         @if($products->isEmpty())
             <p class="text-muted">No products found matching your filters</p>
@@ -56,12 +62,18 @@
                                 <br><small class="text-muted d-block mt-1" style="color: #6c757d;">{{ $product->notes }}</small>
                             @endif
                             <div class="text-end mt-2">
+                            <div class="text-end mt-2">
                                 @if($product->priority == 1)
                                     <span class="badge bg-danger"><i class="fa-solid fa-fire me-1"></i>High</span>
                                 @elseif($product->priority == 2)
                                     <span class="badge bg-warning text-dark"><i class="fa-solid fa-fire-extinguisher me-1"></i>Medium</span>
                                 @else
                                     <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Low</span>
+                                @endif
+                                @if(auth()->check())
+                                   <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-primary ms-2">
+                                        <i class="fa-solid fa-pen me-1"></i> Modify
+                                    </a>
                                 @endif
                             </div>
                         </div>
