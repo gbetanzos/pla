@@ -41,12 +41,10 @@
     </div>
     <div class="card-body bg-light">
         <p class="mb-2"><i class="fa-solid fa-gear me-1"></i> {{ ucfirst($list->priority) }} Priority</p>
-        @if($list->due_date)
-            <p class="text-muted mb-0">
-                <i class="fa-regular fa-clock me-1"></i> 
-                Due: {{ $list->due_date->format('M d, Y') }}
-            </p>
-        @endif
+        <p class="text-muted mb-0">
+            <i class="fa-solid fa-tag me-1"></i> 
+            Total Cost: <strong class="float-end">{{ $totalCost }}</strong>
+        </p>
     </div>
     
     @if(!empty($itemsArray))

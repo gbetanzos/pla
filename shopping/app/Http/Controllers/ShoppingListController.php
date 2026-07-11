@@ -60,7 +60,19 @@ class ShoppingListController extends Controller
     public function show(ShoppingList $list)
     {
         $products = Product::all();
-        return view('shopping-lists.show', ['list' => $list, 'products' => $products]);
+        $items = json_decode($list->items, true) ?: [];
+        $totalCost = 0;
+
+        foreach ($items as $item) {
+            if (isset($item['product_id'])) {
+                $product = $products->find($item['product_id']);
+                if ($product && $product->price) {
+                    $totalCost += $product->price;
+                }
+            }
+        }
+
+        return view('shopping-lists.show', ['list' => $list, 'products' => $products, 'totalCost' => number_format($totalCost, 2)]);
     }
 
     public function create()
