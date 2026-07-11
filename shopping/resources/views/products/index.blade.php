@@ -64,7 +64,7 @@
                                     <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Low</span>
                                 @endif
                                 @if(auth()->check())
-                                   <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-primary ms-2">
+                                   <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-secondary ms-2">
                                         <i class="fa-solid fa-pen me-1"></i> Modify
                                     </a>
                                 @endif
