@@ -49,6 +49,9 @@
                             @if($product->brand)
                                 <small class="text-muted"><i class="fa-solid fa-tags me-1"></i>{{ $product->brand }}</small>
                             @endif
+                            @if($product->price)
+                                <small class="text-success fw-bold"><i class="fa-solid fa-tag me-1"></i>${{ number_format($product->price, 2) }}</small>
+                            @endif
                             @if($product->notes)
                                 <br><small class="text-muted d-block mt-1" style="color: #6c757d;">{{ $product->notes }}</small>
                             @endif

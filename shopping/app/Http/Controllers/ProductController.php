@@ -42,6 +42,7 @@ class ProductController extends Controller
         Product::create([
             'name' => $request->name,
             'brand' => $request->brand,
+            'price' => $request->price,
             'notes' => $request->notes,
         ]);
         return redirect()->route('products.index')->with('success', 'Product created.');
@@ -54,7 +55,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $product->update($request->only(['name', 'brand', 'notes']));
+        $product->update($request->only(['name', 'brand', 'price', 'notes']));
         return redirect()->route('products.index')->with('success', 'Product updated.');
     }
 

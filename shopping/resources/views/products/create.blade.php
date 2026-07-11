@@ -26,6 +26,12 @@
             </div>
 
             <div class="mb-3">
+                <label for="price" class="form-label">Price (optional)</label>
+                <input type="number" class="form-control" id="price" name="price" 
+                       value="{{ old('price') }}" step="0.01" min="0">
+            </div>
+
+            <div class="mb-3">
                 <label for="notes" class="form-label">Notes</label>
                 <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes') }}</textarea>
             </div>

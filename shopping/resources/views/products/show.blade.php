@@ -13,6 +13,10 @@
             <p class="mb-2"><i class="fa-solid fa-tags me-1"></i><strong>Brand:</strong> {{ $product->brand }}</p>
         @endif
 
+        @if($product->price)
+            <p class="mb-2"><i class="fa-solid fa-dollar-sign me-1"></i><strong>Price:</strong> ${{ number_format($product->price, 2) }}</p>
+        @endif
+
         @if($product->notes)
             <p class="mb-2"><i class="fa-solid fa-sticky-note me-1"></i><strong>Notes:</strong> {{ $product->notes }}</p>
         @endif
