@@ -48,7 +48,7 @@
 
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-1"></i>Update</button>
-                <a href="{{ route('shopping-list.index') }}" class="btn btn-success">
+                <a href="{{ route('shopping-lists.index') }}" class="btn btn-success">
                     <i class="fa-solid fa-list me-1"></i>All Lists
                 </a>
             </div>
