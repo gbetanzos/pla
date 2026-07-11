@@ -84,7 +84,8 @@
         </a>
         <form method="POST" action="{{ route('shopping-lists.destroy', $list) }}" data-confirm="true"
               style="display: inline;">
-            @csrf
+          @csrf
+          @method('DELETE')
             <button type="submit" class="btn btn-danger btn-sm">
                 <i class="fa-solid fa-trash"></i> Delete
             </button>
