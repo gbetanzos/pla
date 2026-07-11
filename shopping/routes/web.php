@@ -35,10 +35,13 @@ Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController
 Route::middleware(['auth'])->group(function () {
     // Product mutation routes require auth (already here)
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+    Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
 });
 
-Route::middleware(['auth'])->group(function () { // This group should ideally contain all product/list actions needing auth
-// ... rest of the logic
+
         
 // The routes for ProductCRUD functions are already inside an auth middleware group (lines 35-41). I will ensure the products.index route is also within that functional grouping established by lines 35-41, to keep related authenticated endpoints together and secure it.
 
