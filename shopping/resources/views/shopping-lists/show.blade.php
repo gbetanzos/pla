@@ -2,11 +2,11 @@
 
 @section('content')
 @php
-    $isCompleted = $list->is_completed || (is_array($list->items) && count($list->items) > 0 && !collect($list->items)->pluck('checked')->contains(false));
-    $bgColor = $isCompleted ? '#f0f0f0' : (
-        ($list->priority === 'high') ? '#fdf2f2' : 
-        (($list->priority === 'medium') ? '#fdf6e3' : '#eafaf1')
-    );
+    $itemsArray = is_array($list->items) ? $list->items : (is_string($list->items) ? json_decode($list->items, true) : []);
+    if (!is_array($itemsArray)) {
+        $itemsArray = [];
+    }
+    $isCompleted = $list->is_completed || (count($itemsArray) > 0 && !collect($itemsArray)->pluck('checked')->contains(false));
 @endphp
 
 <div class="card {{ $isCompleted ? 'bg-light' : '' }}" 
@@ -49,11 +49,11 @@
         @endif
     </div>
     
-    @if($list->items && count($list->items) > 0)
+    @if(!empty($itemsArray))
     <div class="card-body">
         <h5 class="mb-3"><i class="fa-solid fa-list-check me-1"></i> Items ({{ $list->completed_percentage }})</h5>
         <div class="list-group">
-            @foreach($list->items as $index => $item)
+            @foreach($itemsArray as $index => $item)
                 @php
                     $product = $products->firstWhere('id', $item['product_id']);
                 @endphp
