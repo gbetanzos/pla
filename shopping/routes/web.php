@@ -34,6 +34,7 @@ Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController
 // Product mutation routes require auth
 Route::middleware(['auth'])->group(function () {
     // Product mutation routes require auth (already here)
+    Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
     Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
