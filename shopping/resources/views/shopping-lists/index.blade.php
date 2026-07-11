@@ -47,42 +47,18 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
                         </p>
                     @endif
 
-                    <div class="d-flex flex-wrap gap-2 mt-auto">
-                        @if($list->priority)
-                            <span class="badge rounded-pill"
-                                  style="background: {{ $priorityColor }}; color: #212529;">
-                                <i class="fas fa-flag"></i> {{ ucfirst($list->priority) }}
-                            </span>
-                        @endif
-
-                        @if($list->is_completed)
-                            <span class="badge bg-success rounded-pill">
-                                <i class="fas fa-check-circle"></i> Complete
-                            </span>
-                        @elseif(count($indexItems) > 0)
-                            <span class="badge bg-secondary rounded-pill">
-                                <i class="fas fa-list-ul"></i> {{ count($indexItems) }} items
-                            </span>
-                        @endif
-
-                        @if($list->due_date)
-                            @if($list->due_date->isPast())
-                                <span class="badge bg-danger rounded-pill">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Due: {{ $list->due_date->format('M d, Y') }}
-                                </span>
-                            @else
-                                <span class="badge bg-warning rounded-pill">
-                                    <i class="far fa-calendar-alt"></i>
-                                    Due: {{ $list->due_date->format('M d, Y') }}
-                                </span>
-                            @endif
-                        @endif
-
-                        <small class="text-muted" style="font-size: 11px;">
-                            {{ $list->created_at->diffForHumans() }}
-                        </small>
-                    </div>
+                                        <div class="d-flex gap-2 mt-2">
+                                            <a href="{{ route('shopping-lists.show', $list) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <form method="POST" action="{{ route('shopping-lists.destroy', $list) }}" data-confirm="true" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                 </div>
 
                 <div style="padding: 12px 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; display: flex; gap: 10px;">

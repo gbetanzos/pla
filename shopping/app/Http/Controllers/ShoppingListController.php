@@ -122,10 +122,6 @@ class ShoppingListController extends Controller
 
     public function destroy(ShoppingList $list)
     {
-        if (!$request('confirm')) {
-            return abort(400, 'Please confirm deletion.');
-        }
-        
         $list->delete();
         return redirect()->route('shopping-lists.index')->with('success', 'Shopping list deleted.');
     }
