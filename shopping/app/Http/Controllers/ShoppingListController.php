@@ -92,32 +92,11 @@ class ShoppingListController extends Controller
         $data = $request->only(['title', 'description', 'priority', 'due_date', 'notes']);
 
         if ($request->has('product_ids')) {
-            $productIds = (array)$request->product_ids;
-            $items = json_decode($list->items, true) ?: [];
-            
-            foreach ($items as &$item) {
-                $item['checked'] = false;
-            }
-            
             $newItems = [];
-            foreach ($productIds as $productId) {
-                $productId = (int)$productId;
-                $alreadyExists = false;
-                foreach ($items as $idx => $item) {
-                    if ((int)$item['product_id'] === $productId) {
-                        $newItems[$idx] = $item;
-                        $alreadyExists = true;
-                    } else {
-                        unset($items[$idx]);
-                    }
-                }
-                if (!$alreadyExists) {
-                    $items[] = ['product_id' => $productId, 'checked' => false];
-                    $newItems[key($items)] = end($items);
-                }
+            foreach ((array)$request->product_ids as $productId) {
+                $newItems[] = ['product_id' => (int)$productId, 'checked' => false];
             }
-            
-            $data['items'] = json_encode(array_values($items));
+            $data['items'] = json_encode($newItems);
         }
 
         $list->update($data);
