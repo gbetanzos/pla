@@ -13,8 +13,8 @@
       style="border-left: 4px solid {{ ($list->priority === 'high') ? '#dc3545' : (($list->priority === 'medium') ? '#ffc107' : '#28a745') }}">
     <div class="card-header bg-transparent text-muted">
         <h2 class="mb-0">
-            @if(is_array($list->items) && count($list->items) > 0 && !collect($list->items)->pluck('checked')->contains(false))
-                <i class="fa-solid fa-check-circle text-success me-2"></i>
+        @if(count($itemsArray) > 0 && !collect($itemsArray)->pluck('checked')->contains(false))
+            <i class="fa-solid fa-check-circle text-success me-2"></i>
             @endif
             {{ $list->title }}
             @if($isCompleted)

@@ -25,10 +25,12 @@
     <div class="shopping-lists-grid"
          style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
         @foreach($lists as $list)
-@php
-    $listBgColor = $list->is_completed ? '#f8f9fa' : 'white';
-    $priorityColor = $list->priority === 'high' ? '#dc3545' : ($list->priority === 'medium' ? '#ffc107' : '#28a745');
-@endphp
+        @php
+            $listBgColor = $list->is_completed ? '#f8f9fa' : 'white';
+            $priorityColor = $list->priority === 'high' ? '#dc3545' : ($list->priority === 'medium' ? '#ffc107' : '#28a745');
+            $indexItems = is_array($list->items) ? $list->items : (is_string($list->items) ? json_decode($list->items, true) : []);
+            if (!is_array($indexItems)) { $indexItems = []; }
+        @endphp
 
             <a href="{{ route('shopping-lists.show', $list) }}"
                class="card shadow-sm border-0 h-100"
@@ -57,9 +59,9 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
                             <span class="badge bg-success rounded-pill">
                                 <i class="fas fa-check-circle"></i> Complete
                             </span>
-                        @elseif(is_array($list->items) && count($list->items) > 0)
+                        @elseif(count($indexItems) > 0)
                             <span class="badge bg-secondary rounded-pill">
-                                <i class="fas fa-list-ul"></i> {{ count($list->items) }} items
+                                <i class="fas fa-list-ul"></i> {{ count($indexItems) }} items
                             </span>
                         @endif
 
@@ -87,8 +89,8 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
                     <span class="text-muted" style="font-size: 12px;">
                         @if($list->is_completed)
                             <i class="fas fa-check-circle text-success"></i>
-                        @elseif($list->items)
-                            <i class="fas fa-list-ul text-primary"></i>
+                    @elseif(!empty($indexItems))
+                        <i class="fas fa-list-ul text-primary"></i>
                         @else
                             <i class="fas fa-list text-secondary"></i>
                         @endif
