@@ -59,7 +59,10 @@
         <label class="form-label fw-bold">Items</label>
         <p class="text-muted mb-2"><small>Select which products belong on this list:</small></p>
         @php
-            $currentItems = $list->items ?? [];
+            $currentItems = is_array($list->items) ? $list->items : (is_string($list->items) ? json_decode($list->items, true) : []);
+            if (!is_array($currentItems)) {
+                $currentItems = [];
+            }
         @endphp
         @if($products->count())
         <div style="max-height: 300px; overflow-y: auto; border: 2px solid #dee2e6; border-radius: 8px; padding: 15px;">
