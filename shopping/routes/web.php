@@ -58,5 +58,6 @@ Fix: Move lines 43-44 (products.index) into the auth group starting on line 35.
 */
 Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 
 require __DIR__.'/auth.php';
