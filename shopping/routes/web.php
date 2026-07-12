@@ -4,20 +4,18 @@ use App\Http\Controllers\ProfileController;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Route;
 
- Route::get('/', function () {
-      return view('landing.index', ['lists' => ShoppingList::whereNotNull('user_id')
-          ->select(['id', 'user_id', 'title', 'description', 'priority', 'due_date', 'completed_at', 'is_completed'])
-          ->orderBy('is_completed', 'desc')
-          ->orderBy('created_at', 'desc')
-          ->paginate(10)
-          ->append('path', request()->previousUrl)]);
-  })->name('landing');
+Route::get('/', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+    return redirect()->route('dashboard');
+});
 
- Route::get('/dashboard', function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
         return view('landing.dashboard');
     })->name('dashboard');
 
- Route::middleware(['auth'])->group(function () {
     Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
     Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
     Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
