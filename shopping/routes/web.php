@@ -27,10 +27,11 @@ use Illuminate\Support\Facades\Route;
     Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
     Route::post('/shopping-list/{list}/add-item', [App\Http\Controllers\ShoppingListController::class, 'addItem'])->name('shopping-lists.add-item')->where('id', '[0-9]+');
     Route::post('/shopping-list/{list}/duplicate', [App\Http\Controllers\ShoppingListController::class, 'duplicate'])->name('shopping-lists.duplicate')->where('id', '[0-9]+');
+    Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
+    Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
 });
 
-Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
-Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
+
 
 // Product mutation routes require auth
 Route::middleware(['auth'])->group(function () {
