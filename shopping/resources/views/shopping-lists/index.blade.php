@@ -14,7 +14,7 @@
                 <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
                     <option value="newest" {{ request('sort') == 'newest' || !request('sort') ? 'selected' : '' }}>Newest</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
-                    <option value="priority" {{ request: ('sort') == 'priority' ? 'selected' : '' }}>Priority</option>
+                    <option value="priority" {{ request('sort') == 'priority' ? 'selected' : '' }}>Priority</option>
                     <option value="due_date" {{ request('sort') == 'due_date' ? 'selected' : '' }}>Due Date</option>
                 </select>
             </form>
@@ -43,7 +43,7 @@
                 <div class="card-body p-4">
                     <h3 class="h5 mb-2 text-truncate">{{ $list->title }}</h3>
 
-                    @if($list->description)
+                    @if($list- >description)
                         <p class="text-muted small mb-3 text-truncate" style="max-width: 100%;">
                             {{ $list->description }}
                         </p>
