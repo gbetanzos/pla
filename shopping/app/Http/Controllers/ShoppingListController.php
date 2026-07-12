@@ -48,7 +48,10 @@ class ShoppingListController extends Controller
         if ($request->has('product_ids')) {
             $items = [];
             foreach ((array)$request->product_ids as $productId) {
-                $items[] = ['product_id' => (int)$productId, 'checked' => false];
+                $qty = (int)$request->input("product_quantities.$productId", 1);
+                for ($i = 0; $i < $qty; $i++) {
+                    $items[] = ['product_id' => (int)$productId, 'checked' => false];
+                }
             }
             $data['items'] = json_encode($items);
         }

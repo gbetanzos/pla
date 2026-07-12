@@ -49,20 +49,25 @@
         <label class="form-label fw-bold"><i class="fa-solid fa-box-open me-1"></i>Select Products (optional)</label>
         <div style="max-height: 300px; overflow-y: auto; border: 2px solid #dee2e6; border-radius: 8px; padding: 15px;">
             @foreach($products as $product)
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" name="product_ids[]" value="{{ $product->id }}" id="prod_{{ $product->id }}">
-                    <label class="form-check-label" for="prod_{{ $product->id }}">
-                        <strong>{{ $product->name }}</strong>
-                        @if($product->brand)
-                            <small class="text-muted ms-1">({{ $product->brand }})</small>
-                        @endif
-                    </label>
+@foreach($products as $product)
+                <div class="d-flex align-items-center mb-2">
+                    <div class="form-check flex-grow-1">
+                        <input class="form-check-input product-checkbox" type="checkbox" name="product_ids[]" value="{{ $product->id }}" id="prod_{{ $product->id }}">
+                        <label class="form-check-label" for="prod_{{ $product->id }}">
+                            <strong class="text-dark">{{ $product->name }}</strong>
+                            @if($product->brand)
+                                <small class="text-muted ms-1">({{ $product->brand }})</small>
+                            @endif
+                        </label>
+                    </div>
+                    <div class="ms-3" style="width: 70px;">
+                        <input type="number" name="product_quantities[{{ $product->id }}]" 
+                               class="form-control form-control-sm qty-input" 
+                               value="1" min="1">
+                    </div>
                 </div>
             @endforeach
-        </div>
-    </div>
-    @endif
-</form>
+
 
 @if(session('error'))
 <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
