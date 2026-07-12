@@ -43,7 +43,7 @@
                 <div class="card-body p-4">
                     <h3 class="h5 mb-2 text-truncate">{{ $list->title }}</h3>
 
-                    @if($list- >description)
+                    @if($list->description)
                         <p class="text-muted small mb-3 text-truncate" style="max-width: 100%;">
                             {{ $list->description }}
                         </p>
