@@ -181,4 +181,11 @@ class ShoppingListController extends Controller
         return redirect()->route('shopping-lists.show', $list)
             ->with('success', count($productIds) . ' product(s) added.');
     }
+
+    public function destroy(ShoppingList $list)
+    {
+        $list->delete();
+
+        return redirect()->route('shopping-lists.index')->with('success', 'Shopping list deleted.');
+    }
 }
