@@ -80,6 +80,12 @@
         <a href="{{ route('shopping-lists.edit', $list) }}" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-pen"></i> Edit
         </a>
+        <form method="POST" action="{{ route('shopping-lists.duplicate', $list) }}" style="display: inline;">
+            @csrf
+            <button type="submit" class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-copy"></i> Duplicate
+            </button>
+        </form>
         <form method="POST" action="{{ route('shopping-lists.destroy', $list) }}" data-confirm="true"
               style="display: inline;">
           @csrf

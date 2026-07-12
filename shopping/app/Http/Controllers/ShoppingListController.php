@@ -120,10 +120,20 @@ class ShoppingListController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function destroy(ShoppingList $list)
+    public function duplicate(ShoppingList $list)
     {
-        $list->delete();
-        return redirect()->route('shopping-lists.index')->with('success', 'Shopping list deleted.');
+        $newData = [
+            'user_id' => auth()->id(),
+            'title' => $list->title . ' (Copy)',
+            'description' => $list->description,
+            'priority' => $list->priority,
+            'due_date' => $list->due_date,
+            'items' => $list->items, // Items is a JSON column so we can just copy it
+        ];
+
+        $newList = ShoppingList::create($newData);
+
+        return redirect()->route('shopping-lists.show', $newList)->with('success', 'Shopping list duplicated.');
     }
 
     public function markComplete(Request $request, ShoppingList $list)

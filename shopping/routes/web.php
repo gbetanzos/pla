@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('/shopping-list/{list}/toggle-item', [App\Http\Controllers\ShoppingListController::class, 'toggleItem'])->name('shopping-lists.toggle-item')->where('id', '[0-9]+');
     Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
     Route::post('/shopping-list/{list}/add-item', [App\Http\Controllers\ShoppingListController::class, 'addItem'])->name('shopping-lists.add-item')->where('id', '[0-9]+');
+    Route::post('/shopping-list/{list}/duplicate', [App\Http\Controllers\ShoppingListController::class, 'duplicate'])->name('shopping-lists.duplicate')->where('id', '[0-9]+');
 });
 
 Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
