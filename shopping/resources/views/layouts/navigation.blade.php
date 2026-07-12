@@ -55,10 +55,7 @@
             <a href="{{ route('shopping-list.create') }}" class="btn btn-success">
                 <i class="fa-solid fa-plus me-1"></i>New List
             </a>
-            @if(route('register'))
-            <a href="{{ route('register') }}" class="btn btn-outline-primary">Sign Up</a>
-            @endif
-            @if(route('login'))
+            @if(Route::has('login'))
             <a href="{{ route('login') }}" class="btn btn-outline-primary">Log In</a>
             @endif
         </div>
