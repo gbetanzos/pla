@@ -28,8 +28,12 @@
         @php
             $listBgColor = $list->is_completed ? '#f8f9fa' : 'white';
             $priorityColor = $list->priority === 'high' ? '#dc3545' : ($list->priority === 'medium' ? '#ffc107' : '#28a745');
-            $indexItems = is_array($list->items) ? $list->items : (is_string($list->items) ? json_decode($list->items, true) : []);
-            if (!is_array($indexItems)) { $indexItems = []; }
+            // Safely decode items JSON, default to empty array if null or invalid
+            $indexItems = [];
+            if (!empty($list->items)) {
+                $decodedItems = json_decode($list->items, true);
+                $indexItems = is_array($decodedItems) ? $decodedItems : [];
+            }
         @endphp
 
             <a href="{{ route('shopping-lists.show', $list) }}"
@@ -91,3 +95,4 @@ style="background: {{ $listBgColor }}; border-left: 8px solid {{ $priorityColor 
     </div>
 </div>
 @endsection
+
