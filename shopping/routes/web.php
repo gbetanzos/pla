@@ -40,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
     Route::get('/product/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
+
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 });
 
 
@@ -57,8 +61,6 @@ Route::get('/products', [App\Http\Controllers\ProductController::class, 'index']
 
 Fix: Move lines 43-44 (products.index) into the auth group starting on line 35.
 */
-Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
-Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+
 
 require __DIR__.'/auth.php';
