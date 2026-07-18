@@ -20,10 +20,6 @@ class ProductController extends Controller
             });
         }
 
-        if ($request->filled('priority')) {
-            $query->where('priority', $request->priority);
-        }
-
         return view('products.index', ['products' => $query->get()]);
     }
 

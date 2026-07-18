@@ -48,8 +48,7 @@
     <div class="mt-4">
         <label class="form-label fw-bold"><i class="fa-solid fa-box-open me-1"></i>Select Products (optional)</label>
         <div style="max-height: 300px; overflow-y: auto; border: 2px solid #dee2e6; border-radius: 8px; padding: 15px;">
-            @foreach($products as $product)
-@foreach($products as $product)
+                @foreach($products as $product)
                 <div class="d-flex align-items-center mb-2">
                     <div class="form-check flex-grow-1">
                         <input class="form-check-input product-checkbox" type="checkbox" name="product_ids[]" value="{{ $product->id }}" id="prod_{{ $product->id }}">
@@ -61,18 +60,21 @@
                         </label>
                     </div>
                     <div class="ms-3" style="width: 70px;">
-                        <input type="number" name="product_quantities[{{ $product->id }}]" 
-                               class="form-control form-control-sm qty-input" 
+                        <input type="number" name="product_quantities[{{ $product->id }}]"
+                               class="form-control form-control-sm qty-input"
                                value="1" min="1">
                     </div>
                 </div>
-            @endforeach
+                @endforeach
+            </div>
+    @endif
 
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
-@if(session('error'))
-<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-    {{ session('error') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-@endif
+</form>
 @endsection

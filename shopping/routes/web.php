@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,9 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-// Product mutation routes require auth
 Route::middleware(['auth'])->group(function () {
-    // Product mutation routes require auth (already here)
     Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
     Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
@@ -45,22 +42,5 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 });
-
-
-        
-// The routes for ProductCRUD functions are already inside an auth middleware group (lines 35-41). I will ensure the products.index route is also within that functional grouping established by lines 35-41, to keep related authenticated endpoints together and secure it.
-
-/* Reorganizing product routes:
-Original:
-Route::middleware(['auth'])->group(function () {
-    Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
-    // ... other product mutations
-});
-
-Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index'); // This is outside auth middleware initially
-
-Fix: Move lines 43-44 (products.index) into the auth group starting on line 35.
-*/
-
 
 require __DIR__.'/auth.php';

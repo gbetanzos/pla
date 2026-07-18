@@ -12,17 +12,9 @@
                     value="{{ request('search') }}" class="form-control" style="max-width: 300px;">
             </div>
             <div class="col-auto">
-                <select name="priority" class="form-select">
-                    <option value="">All Priorities</option>
-                    <option value="1" {{ request('priority') == '1' ? 'selected' : '' }}>High</option>
-                    <option value="2" {{ request('priority') == '2' ? 'selected' : '' }}>Medium</option>
-                    <option value="3" {{ request('priority') == '3' ? 'selected' : '' }}>Low</option>
-                </select>
-            </div>
-            <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
-            @if(request('search') || request('priority'))
+            @if(request('search'))
                 <div class="col-auto">
                     <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">Reset</a>
                 </div>
@@ -38,12 +30,7 @@
         @else
             <div class="list-group">
                 @foreach($products as $product)
-                    <label class="list-group-item d-flex align-items-center p-3 {{ $product->brand ? '' : 'active' }}" 
-                           style="{{ $product->priority == 1 ? 'border-left: 4px solid #dc3545;' : '' }}
-                                   {{ $product->priority == 2 ? 'border-left: 4px solid #ffc107;' : '' }}
-                                   {{ $product->priority == 3 ? 'border-left: 4px solid #28a745;' : '' }}">
-                        <input type="checkbox" class="form-check-input me-2" 
-                               id="p{{ $product->id }}" {{ $product->brand ? '' : 'checked' }}>
+                    <div class="list-group-item d-flex align-items-center p-3">
                         <div class="flex-grow-1">
                             <strong class="fs-5">{{ $product->name }}</strong>
                             @if($product->brand)
@@ -56,13 +43,6 @@
                                 <br><small class="text-muted d-block mt-1" style="color: #6c757d;">{{ $product->notes }}</small>
                             @endif
                             <div class="text-end mt-2">
-                                @if($product->priority == 1)
-                                    <span class="badge bg-danger"><i class="fa-solid fa-fire me-1"></i>High</span>
-                                @elseif($product->priority == 2)
-                                    <span class="badge bg-warning text-dark"><i class="fa-solid fa-fire-extinguisher me-1"></i>Medium</span>
-                                @else
-                                    <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Low</span>
-                                @endif
                                 @if(auth()->check())
                                    <a href="{{ route('products.edit', $product) }}" class="btn btn-secondary btn-sm ms-2">
                                         <i class="fa-solid fa-pen me-1"></i> Modify
@@ -70,7 +50,7 @@
                                 @endif
                             </div>
                         </div>
-                    </label>
+                    </div>
                 @endforeach
             </div>
         @endif
