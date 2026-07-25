@@ -15,17 +15,17 @@ Route::middleware(['auth'])->group(function () {
         return view('landing.dashboard');
     })->name('dashboard');
 
-    Route::get('/shopping-list/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-list.create');
-    Route::post('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-list.store');
-    Route::get('/shopping-list/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
-    Route::put('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'update'])->name('shopping-lists.update')->where('id', '[0-9]+');
-    Route::delete('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy')->where('id', '[0-9]+');
-    Route::post('/shopping-list/{list}/toggle-item', [App\Http\Controllers\ShoppingListController::class, 'toggleItem'])->name('shopping-lists.toggle-item')->where('id', '[0-9]+');
-    Route::post('/shopping-list/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
-    Route::post('/shopping-list/{list}/add-item', [App\Http\Controllers\ShoppingListController::class, 'addItem'])->name('shopping-lists.add-item')->where('id', '[0-9]+');
-    Route::post('/shopping-list/{list}/duplicate', [App\Http\Controllers\ShoppingListController::class, 'duplicate'])->name('shopping-lists.duplicate')->where('id', '[0-9]+');
-    Route::get('/shopping-list', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
-    Route::get('/shopping-list/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
+    Route::get('/shopping-lists/create', [App\Http\Controllers\ShoppingListController::class, 'create'])->name('shopping-lists.create');
+    Route::post('/shopping-lists', [App\Http\Controllers\ShoppingListController::class, 'store'])->name('shopping-lists.store');
+    Route::get('/shopping-lists/{list}/edit', [App\Http\Controllers\ShoppingListController::class, 'edit'])->name('shopping-lists.edit')->where('id', '[0-9]+');
+    Route::put('/shopping-lists/{list}', [App\Http\Controllers\ShoppingListController::class, 'update'])->name('shopping-lists.update')->where('id', '[0-9]+');
+    Route::delete('/shopping-lists/{list}', [App\Http\Controllers\ShoppingListController::class, 'destroy'])->name('shopping-lists.destroy')->where('id', '[0-9]+');
+    Route::post('/shopping-lists/{list}/toggle-item', [App\Http\Controllers\ShoppingListController::class, 'toggleItem'])->name('shopping-lists.toggle-item')->where('id', '[0-9]+');
+    Route::post('/shopping-lists/{list}/mark-complete', [App\Http\Controllers\ShoppingListController::class, 'markComplete'])->name('shopping-lists.mark-complete')->where('id', '[0-9]+');
+    Route::post('/shopping-lists/{list}/add-item', [App\Http\Controllers\ShoppingListController::class, 'addItem'])->name('shopping-lists.add-item')->where('id', '[0-9]+');
+    Route::post('/shopping-lists/{list}/duplicate', [App\Http\Controllers\ShoppingListController::class, 'duplicate'])->name('shopping-lists.duplicate')->where('id', '[0-9]+');
+    Route::get('/shopping-lists', [App\Http\Controllers\ShoppingListController::class, 'index'])->name('shopping-lists.index');
+    Route::get('/shopping-lists/{list}', [App\Http\Controllers\ShoppingListController::class, 'show'])->name('shopping-lists.show')->where('id', '[0-9]+');
 });
 
 

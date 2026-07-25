@@ -2,7 +2,7 @@
 
 @section('content')
 <h2 class="mb-4">Create New Shopping List</h2>
-<form action="{{ route('shopping-list.store') }}" method="POST"
+<form action="{{ route('shopping-lists.store') }}" method="POST"
       class="card shadow-sm border-0"
       style="padding: 30px; background: #f8f9fa;">
     @csrf

@@ -52,7 +52,7 @@
             <a href="{{ route('products.index') }}" class="btn btn-outline-primary">
                 <i class="fa-solid fa-box me-1"></i>Browse
             </a>
-            <a href="{{ route('shopping-list.create') }}" class="btn btn-success">
+            <a href="{{ route('shopping-lists.create') }}" class="btn btn-success">
                 <i class="fa-solid fa-plus me-1"></i>New List
             </a>
             @if(Route::has('login'))

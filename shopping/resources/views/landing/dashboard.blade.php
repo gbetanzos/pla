@@ -61,7 +61,7 @@
                             <a href="{{ route('products.index') }}" class="btn btn-outline-primary btn-lg">
                                 <i class="fa-solid fa-box me-2"></i> Browse Products
                             </a>
-                            <a href="{{ route('shopping-list.create') }}" class="btn btn-success btn-lg">
+                            <a href="{{ route('shopping-lists.create') }}" class="btn btn-success btn-lg">
                                 <i class="fa-solid fa-plus me-2"></i> Create New Shopping List
                             </a>
                             <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-lg">

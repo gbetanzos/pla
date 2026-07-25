@@ -27,7 +27,7 @@
                     <i class="fa-solid fa-clipboard-list fa-4x text-muted mb-3"></i>
                     <h4 class="text-muted mb-2">No shopping lists yet</h4>
                     <p class="text-muted mb-4">Create one from the shopping list page or login to get started.</p>
-                    <a href="{{ route('shopping-list.create') }}" class="btn btn-primary">
+                    <a href="{{ route('shopping-lists.create') }}" class="btn btn-primary">
                         <i class="fa-solid fa-plus me-1"></i>Create New List
                     </a>
                 </div>
@@ -73,7 +73,7 @@
 
                 <!-- Create Button -->
                 <div class="text-center mt-4">
-                    <a href="{{ route('shopping-list.create') }}" class="btn btn-primary btn-lg">
+                    <a href="{{ route('shopping-lists.create') }}" class="btn btn-primary btn-lg">
                         <i class="fa-solid fa-plus me-2"></i>Create New Shopping List
                     </a>
                 </div>

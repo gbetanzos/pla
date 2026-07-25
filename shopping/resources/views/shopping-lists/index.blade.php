@@ -7,7 +7,7 @@
         <h2 class="mb-0">My Shopping Lists</h2>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('shopping-list.create') }}" class="btn btn-success">
+            <a href="{{ route('shopping-lists.create') }}" class="btn btn-success">
                 <i class="fas fa-plus me-1"></i> Create List
             </a>
             <form method="GET" action="{{ route('shopping-lists.index') }}" class="d-flex align-items-center gap-2 mb-0">
@@ -83,7 +83,7 @@
                     <i class="fas fa-list-alt text-muted fa-3x mb-3"></i>
                     <h4 class="text-muted mb-2">No shopping lists yet</h4>
                     <p class="text-muted">Create your first list to get started!</p>
-                    <a href="{{ route('shopping-list.create') }}" class="btn btn-primary mt-2">
+                    <a href="{{ route('shopping-lists.create') }}" class="btn btn-primary mt-2">
                         <i class="fas fa-plus me-1"></i> Create List
                     </a>
                 </div>

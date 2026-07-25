@@ -43,7 +43,7 @@
             <h5 class="fw-bold mb-1">Ready to start?</h5>
             <p class="text-muted mb-4 small">Sign in to manage your lists or jump right in.</p>
             <div class="d-flex flex-wrap justify-content-center gap-3">
-                <a href="{{ route('shopping-list.create') }}"
+                <a href="{{ route('shopping-lists.create') }}"
                    class="btn btn-primary btn-lg px-4">
                     <i class="fa-solid fa-plus me-2"></i>Create Your First List
                 </a>
