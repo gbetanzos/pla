@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 
 class ShoppingListController extends Controller
 {
+    protected function authorize(ShoppingList $list)
+    {
+        abort_if($list->user_id !== auth()->id(), 403);
+    }
+
     public function index()
     {
-        $query = ShoppingList::query();
+        $query = ShoppingList::where('user_id', auth()->id());
 
         switch (request('sort', 'newest')) {
             case 'oldest':
@@ -62,6 +67,7 @@ class ShoppingListController extends Controller
 
     public function show(ShoppingList $list)
     {
+        $this->authorize($list);
         $products = Product::all();
         $items = json_decode($list->items, true) ?: [];
         $totalCost = 0;
@@ -86,12 +92,14 @@ class ShoppingListController extends Controller
 
     public function edit(ShoppingList $list)
     {
+        $this->authorize($list);
         $products = Product::all();
         return view('shopping-lists.edit', ['list' => $list, 'products' => $products]);
     }
 
     public function update(Request $request, ShoppingList $list)
     {
+        $this->authorize($list);
         $data = $request->only(['title', 'description', 'priority', 'due_date', 'notes']);
 
         if ($request->has('product_ids')) {
@@ -108,6 +116,7 @@ class ShoppingListController extends Controller
 
     public function toggleItem(Request $request, ShoppingList $list)
     {
+        $this->authorize($list);
         $itemId = (int)$request->item_id;
         $items = json_decode($list->items, true) ?? [];
 
@@ -125,6 +134,7 @@ class ShoppingListController extends Controller
 
     public function duplicate(ShoppingList $list)
     {
+        $this->authorize($list);
         $newData = [
             'user_id' => auth()->id(),
             'title' => $list->title . ' (Copy)',
@@ -141,6 +151,7 @@ class ShoppingListController extends Controller
 
     public function markComplete(Request $request, ShoppingList $list)
     {
+        $this->authorize($list);
         $list->is_completed = true;
         $list->completed_at = now();
         $list->save();
@@ -150,6 +161,7 @@ class ShoppingListController extends Controller
 
     public function addItem(Request $request, ShoppingList $list)
     {
+        $this->authorize($list);
         $productIds = $request->filled('product_ids')
             ? (array)$request->product_ids
             : (is_array($request->product_id) ? $request->product_id : [$request->product_id]);
@@ -187,6 +199,7 @@ class ShoppingListController extends Controller
 
     public function destroy(ShoppingList $list)
     {
+        $this->authorize($list);
         $list->delete();
 
         return redirect()->route('shopping-lists.index')->with('success', 'Shopping list deleted.');

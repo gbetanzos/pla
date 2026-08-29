@@ -1,8 +1,16 @@
 # Shopping List App - Progress Log
 
-Last Updated: Mon Jul 06 2026 12:00 UTC
+Last Updated: Sat Sep 06 2026 12:00 UTC
 
-## 🔄 Completed in Latest Session (Jul 6 2026)
+## 🔄 Completed in Latest Session (Sep 6 2026)
+
+### User Authorization (#2)
+- Added `authorize(ShoppingList $list)` helper → `abort_if($list->user_id !== auth()->id(), 403)`
+- Applied to: `show`, `edit`, `update`, `toggleItem`, `duplicate`, `markComplete`, `addItem`, `destroy`
+- `index()` now filters by `user_id` so users only see their own lists
+- Ran `composer install` — vendor/ was missing, 106 packages restored
+
+### Previous Session (Jul 6 2026)
 
 ### Add Products to Shopping List — Controller Fixes
 - **#13**: Added `addItem()` method to `ShoppingListController` — was missing despite route definition at `web.php:28`
@@ -106,10 +114,11 @@ Last Updated: Mon Jul 06 2026 12:00 UTC
 - Visual badge (✓) on completed lists
 
 ## 📌 Still Pending
-- **#9**: Product model missing `$fillable` — `Product::create()` will throw MassAssignmentException
-- **#10**: ShoppingList has `public $fillable` — should be `protected $fillable` or use `$guarded = []`
-- **#11**: Sorting button in index page shows dead alert dialog
-- **#12**: Product index filter form sends search/priority params, but controller ignores them
+- **#3**: No `$request->validate()` in `ProductController@store` and `@update` — accepts any input silently
+- **#9**: ~~Product model missing `$fillable`~~ — fixed (has `protected $fillable`)
+- **#10**: ~~ShoppingList has `public $fillable`~~ — fixed (uses `protected $fillable`)
+- **#11**: ~~Sorting button shows dead alert~~ — fixed (uses form submit)
+- **#12**: ~~Product filter ignored in controller~~ — fixed (search works)
 
 ## 🚫 Removed
 - `$fillable` properties from models (Laravel 11 uses static assignment)
