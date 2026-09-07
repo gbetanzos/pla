@@ -249,5 +249,17 @@ MAIL_MAILER=log
 - This document: `/home/developer/pla/luffof/AGENTS.md`
 
 ---
+## Progress Log
+
+| Date | Task | Status | Notes |
+|------|------|--------|-------|
+| 2026-09-07 | Finalize GuestLayout component | ✅ | Commit cd43944 |
+
+## TODO
+
+| Date | Task | Status | Notes |
+|------|------|--------|-------|
+| 2026-09-07 | Implement PHP component `<x-guest-layout>` | 🔍 | Decision pending |
+
 *Updated with latest session progress - Resume from here*
 

@@ -4,10 +4,10 @@ use App\Http\Controllers\Bp\BpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return view('welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
+    return view('dashboard', [
         'bpCount' => App\Models\BloodPressure::count(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
