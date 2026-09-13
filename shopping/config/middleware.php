@@ -21,7 +21,6 @@ return [
 
     'guest' => [
         \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class.':admin',
-        \App\Http\Middleware\GuestView::class,
     ],
 
     /*
@@ -30,8 +29,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'admin' => [
-        \App\Http\Middleware\GuestView::class,
-    ],
+    'admin' => [],
 
 ];

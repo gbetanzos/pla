@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -35,6 +37,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(ProductStoreRequest::rules());
+
         Product::create([
             'name' => $request->name,
             'brand' => $request->brand,
@@ -49,9 +53,9 @@ class ProductController extends Controller
         return view('products.edit', ['product' => $product]);
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        $product->update($request->only(['name', 'brand', 'price', 'notes']));
+        $product->update($request->validated());
         return redirect()->route('products.index')->with('success', 'Product updated.');
     }
 

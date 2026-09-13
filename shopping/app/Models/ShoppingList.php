@@ -25,7 +25,6 @@ class ShoppingList extends Model
         'items' => 'array',
         'is_completed' => 'boolean',
         'due_date' => 'date',
-        'completed_at' => 'datetime',
     ];
 
     protected $appends = ['completed_percentage'];
@@ -33,27 +32,6 @@ class ShoppingList extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function toggleComplete()
-    {
-        $this->update([
-            'is_completed' => !$this->is_completed,
-            'completed_at' => now()
-        ]);
-    }
-
-    public function completeItems(array $checkedItemIndices)
-    {
-        $items = is_array($this->items) ? $this->items : [];
-        $updatedItems = [];
-        foreach ($items as $index => $item) {
-            if (isset($checkedItemIndices[$index])) {
-                $item['checked'] = true;
-            }
-            $updatedItems[] = $item;
-        }
-        $this->update(['items' => $updatedItems]);
     }
 
     public function getCompletedPercentageAttribute()

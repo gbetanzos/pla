@@ -13,6 +13,14 @@ class ShoppingListController extends Controller
         abort_if($list->user_id !== auth()->id(), 403);
     }
 
+    protected function collectItems(Request $request): array
+    {
+        return collect((array)$request->product_ids)
+            ->map(fn($productId) => ['product_id' => (int)$productId, 'checked' => false])
+            ->values()
+            ->all();
+    }
+
     public function index()
     {
         $query = ShoppingList::where('user_id', auth()->id());
@@ -50,18 +58,8 @@ class ShoppingListController extends Controller
             'notes' => $request->notes,
         ];
 
-        if ($request->has('product_ids')) {
-            $items = [];
-            foreach ((array)$request->product_ids as $productId) {
-                $qty = (int)$request->input("product_quantities.$productId", 1);
-                for ($i = 0; $i < $qty; $i++) {
-                    $items[] = ['product_id' => (int)$productId, 'checked' => false];
-                }
-            }
-            $data['items'] = json_encode($items);
-        }
-
-        ShoppingList::create($data);
+        $data = array_merge($data, $this->collectItems($request));
+        $list = ShoppingList::create($data);
         return redirect()->route('shopping-lists.index')->with('success', 'Shopping list created.');
     }
 
@@ -102,15 +100,7 @@ class ShoppingListController extends Controller
         $this->authorize($list);
         $data = $request->only(['title', 'description', 'priority', 'due_date', 'notes']);
 
-        if ($request->has('product_ids')) {
-            $newItems = [];
-            foreach ((array)$request->product_ids as $productId) {
-                $newItems[] = ['product_id' => (int)$productId, 'checked' => false];
-            }
-            $data['items'] = json_encode($newItems);
-        }
-
-        $list->update($data);
+        $list->update(array_merge($data, $this->collectItems($request)));
         return redirect()->route('shopping-lists.show', $list)->with('success', 'Shopping list updated.');
     }
 
@@ -122,7 +112,7 @@ class ShoppingListController extends Controller
 
         foreach ($items as &$item) {
             if ((int)$item['product_id'] === $itemId) {
-                $item['checked'] = !$item['checked'];
+                $item['checked'] = $request->boolean('checked') ? true : !$item['checked'];
             }
         }
 
@@ -141,7 +131,7 @@ class ShoppingListController extends Controller
             'description' => $list->description,
             'priority' => $list->priority,
             'due_date' => $list->due_date,
-            'items' => $list->items, // Items is a JSON column so we can just copy it
+            'items' => $list->items,
         ];
 
         $newList = ShoppingList::create($newData);
@@ -171,9 +161,11 @@ class ShoppingListController extends Controller
         }
 
         $items = json_decode($list->items, true) ?: [];
+        $count = 0;
 
         foreach ($productIds as $productId) {
             $productId = (int)$productId;
+            $qty = max(1, (int)($request->input("product_quantities.$productId", 1)));
             $alreadyExists = false;
             foreach ($items as $item) {
                 if ((int)$item['product_id'] === $productId) {
@@ -182,7 +174,10 @@ class ShoppingListController extends Controller
                 }
             }
             if (!$alreadyExists) {
-                $items[] = ['product_id' => $productId, 'checked' => false];
+                for ($i = 0; $i < $qty; $i++) {
+                    $items[] = ['product_id' => $productId, 'checked' => false];
+                    $count++;
+                }
             }
         }
 
@@ -190,11 +185,11 @@ class ShoppingListController extends Controller
         $list->save();
 
         if ($request->wantsJson()) {
-            return response()->json(['success' => true, 'count' => count($items)]);
+            return response()->json(['success' => true, 'count' => $count]);
         }
 
         return redirect()->route('shopping-lists.show', $list)
-            ->with('success', count($productIds) . ' product(s) added.');
+            ->with('success', "$count product(s) added.");
     }
 
     public function destroy(ShoppingList $list)

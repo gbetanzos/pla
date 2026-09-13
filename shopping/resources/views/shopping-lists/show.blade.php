@@ -97,39 +97,8 @@
     </div>
 </div>
     
-    <script>
-    (function() {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-        
-        // Toggle complete state handler
-        document.querySelectorAll('.items-list-item-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const productId = this.dataset.productId;
-                const checked = this.checked;
-                const row = this.closest('.items-list-item');
-                
-                if (!productId) return;
-                
-                fetch(`/shopping-list/{{ $list->id }}/toggle-item`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        item_id: productId,
-                        checked: checked
-                    })
-                }).then(res => res.json()).then(data => {
-                    if (data.success) {
-                        row.classList.toggle('completed', checked);
-                    } else {
-                        alert(data.message || 'Error toggling item');
-                    }
-                }).catch(err => console.error(err));
-            });
-        });
-    })();
-    </script>
+    @push('scripts')
+    <script src="/js/toggle-item.js"></script>
+    @endpush
 </div>
 @endsection
