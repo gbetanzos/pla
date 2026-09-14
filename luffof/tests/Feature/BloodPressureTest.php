@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\BloodPressure;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BloodPressureTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected $admin;
     protected $user;
 
@@ -15,7 +18,7 @@ class BloodPressureTest extends TestCase
     {
         parent::setUp();
         $this->admin = User::factory()->create(['name' => 'Admin User', 'email' => 'admin@example.com']);
-        $this->user = User::factory()->create(['name' => 'Test User', 'email' => 'test@example.com']);
+        $this->user = User::factory()->create(['name' => 'Test USER', 'email' => 'test@example.com']);
     }
 
     public function test_bp_route_exists(): void

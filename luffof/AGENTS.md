@@ -2,264 +2,122 @@
 
 ## Project Overview
 Blood pressure tracking application built with:
-- **Backend**: Laravel 11 with Inertia.js 2.0 + Vue 3
-- **Frontend**: Vue 3 + Vite + TailwindCSS
-- **Database**: SQLite (SQLite3)
+- **Backend**: Laravel 11
+- **Frontend**: Blade + Bootstrap 5.3 (server-rendered, CDN)
 - **Authentication**: Laravel Breeze
-- **Deployment**: Kubernetes-ready
+- **Database**: SQLite (default), MySQL/PostgreSQL via `.env`
+- **Testing**: PHPUnit 11
+- **Realtime / SPA**: none (Inertia.js and Vue 3 were removed)
 
-## Environment
-- **PHP**: 8.3 (system default)
-- **Node.js**: 20.20.2
-- **npm**: 10.8.2
-- **Database**: SQLite3
+> **Current reality:** The app is **Bare-metal server-rendered Blade**. There is **no SPA layer, no Inertia, no Ziggy, no Tailwind, no Vue components.** Any document or plan still assuming a Vue/Inertia stack is out of date.
 
-## Installation History - What Has Been Done
+## Environment (on this machine)
+- **PHP**: 8.3.6 (`php -v`)
+- **Node/NPM**: **not installed**
+- **Composer**: installed as `composer.phar` (a standalone PHP autoloader)
+- **Database**: SQLite3 (migration files present; DB file not present on disk)
 
-### 1. Composer Setup
-```bash
-curl -sS https://getcomposer.org/installer -o composer.phar
-php /usr/bin/composer.phar install
-php artisan key:generate
-```
+## Repo Layout
+Base: `/home/developer/pla/luffof/` (Laravel 11 skeleton)
+Remote: `git@github.com:gbetanzos/pla.git` — local is 1 commit ahead of `origin/main`
 
-### 2. Database Setup
-```bash
-touch database/database.sqlite
-php artisan migrate:fresh --force
-php artisan db:seed --class=BPSampleSeeder
-```
-
-### 3. Node.js Setup
-```bash
-sudo apt-get install -y nodejs
-# Upgrades to v20.20.2 - satisfies Vite requirements
-```
-
-### 4. NPM Setup
-```bash
-npm install
-# Added 170 packages
-npm audit
-# No vulnerabilities
-```
-
-### 5. Frontend Build
-```bash
-npm run build
-# Successfully built 22 asset files
-# Output: public/build/
-```
-
-### 6. Server Start
-```bash
-php artisan serve --host=0.0.0.0 --port=8000
-# Server running at http://0.0.0.0:8000
-```
-
-## Architecture
-
-### File Structure
 ```
 /app
-  Blog (API for blog feature)
-/app/Http/Controllers/
-  Auth/
-    AuthenticatedController.php
-    RegisterController.php
-  BP/ (Blood Pressure controllers)
-  Blog/
-    BlogController.php
-  BPController.php
-  BlogController.php
-  ProfileController.php
-  RecordController.php
-/app/Models/
-  Blog.php
-  Record.php
-  User.php
-/app/Providers/
-  AppServiceProvider.php
+  /app/Http/Controllers/
+    /Auth/
+      AuthenticatedSessionController.php
+      ConfirmablePasswordController.php
+      EmailVerificationNotificationController.php
+      EmailVerificationPromptController.php
+      NewPasswordController.php
+      PasswordController.php
+      PasswordResetLinkController.php
+      RegisteredUserController.php
+      VerifyEmailController.php
+    /Bp/                                   # ← BP CRUD controller lives here (namespaced)
+      BpController.php
+    ProfileController.php
+  /app/Http/Controllers/BpController.php    # ❌ does NOT exist (stale name)
+  /app/Models/
+    BloodPressure.php                       # ✅ model
+    User.php
+  /app/Providers/
+    AppServiceProvider.php
+  /app/View/Components/
+    GuestLayout.php                         # ✅ resolves app layout
 /public
-  build/ (Vite output)
-/views
-  auth/ (Laravel Breeze views)
-  bp/
-blog/ (static blog file)
-
+  /public/build                             # ❌ does not exist (never built)
+/resources/views/
+  /resources/views/auth/                   # Breeze Blade views (login, register, verify, reset, ...)
+  /resources/views/bp/                      # ✅ index/create/show/edit
+  /resources/views/layouts/
+    app.blade.php                          # authenticated layout
+    guest.blade.php                        # guest / auth layout (Bootstrap CDN)
+  app.blade.php                            # welcome landing
+  dashboard.blade.php
+  welcome.blade.php
+  profile/edit.blade.php
+/routes/
+  web.php (BP CRUD)
+  auth.php
+/database/migrations/2026_04_19_050428_create_blood_pressures_table.php
+/database/seeders/BPSampleSeeder.php
+/database/factories/UserFactory.php (only; BloodPressureFactory missing)
 ```
 
-### Key Views
+## Authentication Flow
+1. User visits `/` → `welcome.blade.php` (pure Blade landing page)
+2. Authenticated → `/dashboard` (`auth` + `verified` middleware) → `dashboard.blade.php`
+3. Breeze provides: login / register / verify-email / password-reset (Blade views, not Inertia)
 
-#### Inertia Vue Pages (`resources/js/Pages/`)
-- `Index.vue` - Dashboard
-- `Dashboard.vue` 
-- `Profile/Edit.vue` - Edit profile
-- `GuestLayout.vue` - Inertia guest layout (auth pages)
-- `Welcome.vue` - Welcome
+## Database Tables (from migrations)
+- `users` — authentication
+- `blood_pressures` — readings (`systolic`, `diastolic`, `notes`, timestamps); `user_id` FK → `users`
+- `sessions`, `password_reset_tokens`, `personal_access_tokens`, `failed_jobs` (Breeze)
 
-#### Laravel Blade Views (`resources/views/`)
-- `auth/*` - Login, register, forgot password (Inertia-powered)
-- `bp/*` - Blood pressure records pages
-- `blog/*` - Blog pages
-- **Note**: Uses `<x-guest-layout>` component for layout
+## Routes (BP CRUD, all behind `auth`)
+| URL | Method | Handler |
+| --- | --- | --- |
+| `/` | GET | welcome landing |
+| `/dashboard` | GET | protected |
+| `/bp` | GET | `Bp\bp.index` |
+| `/bp/create` | GET | `Bp\bp.create` |
+| `/bp` | POST | `Bp\bp.store` |
+| `/bp/{bp}` | GET | `Bp\bp.show` |
+| `/bp/{bp}/edit` | GET | `Bp\bp.edit` |
+| `/bp/{bp}` | PATCH | `Bp\bp.update` |
+| `/bp/{bp}` | DELETE | `Bp\bp.destroy` |
 
-### Authentication Flow
-1. User visits `/` → `Index.vue` (dashboard)
-2. Not logged in → Redirects to login via Inertia
-3. Login page at `/` (Inertia: `Login.vue`)
-4. Breeze provides: login, register, forgot password, verify email
+## Validation & Behavior
+- **BP store/update**: `systolic` 80–250, `diastolic` 60–120, `notes` nullable ≤500
+- **Ownership**: `store` / `update` / `destroy` enforce `$request->user() === $bp->user`
+- **Status display**: none stored; rows classified by systolic/diastolic thresholds (index/edit forms show them)
 
-### Database Tables (from SQLite)
-- `users` - Authentication
-- `records` - Blood pressure records
-- `blogs` - Blog posts (seeded data)
-- `password_resets`
-- `sessions`
-- `personal_access_tokens`
-
-### Environment Variables (`.env`)
-```env
-APP_NAME=LuffoF
-APP_ENV=local
-APP_KEY=<generated>
-APP_DEBUG=true
-APP_URL=http://laruff.local:8000
-
-LOG_CHANNEL=stack
-LOG_DEPRECATIONS_CHANNEL=null
-BROADCAST_LOG_CHANNEL=stack
-
-DB_CONNECTION=sqlite
-
-BROADCAST_CONNECTION=log
-
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-
-CACHE_STORE=database
-
-MAIL_MAILER=log
+## Development Commands
+```bash
+composer.phar install          # (not: composer install — path is composer.phar here)
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate --force
+php artisan db:seed --class=BPSampleSeeder            # ⚠️ seeder has a seeding bug (see below)
+php artisan serve                        # (server currently broken: vendor/ missing)
+vendor/bin/phpunit                       # ⚠️ vendor/ missing on disk — will fail here
 ```
 
-## Known Issues & Solutions
-
-### Issue 1: npm engine warnings
-- **Symptom**: `npm warn EBADENGINE` about Node.js version
-- **Root cause**: Vite requires Node.js 20.19+ or 22.12+
-- **Solution**: Upgraded to Node.js 20.20.2 via NodeSource repo
-- **Status**: ✅ Resolved
-
-### Issue 2: npm install failures after upgrade
-- **Symptom**: `rolldown native binding not found`
-- **Root cause**: Optional dependencies bug in npm
-- **Solution**: Delete `node_modules` and `package-lock.json`, reinstall
-- **Status**: ✅ Resolved
-
-### Issue 3: Blade component error
-- **Symptom**: "Unable to locate a class or view for component [guest-layout]"
-- **Root cause**: Blade views use `<x-guest-layout>` but no PHP component exists
-- **Solutions**:
-  1. Create `app/View/Components/GuestLayout.php`
-  2. OR remove `<x-guest-layout>` from blade files
-- **Status**: ⚠️ Pending decision
-
-## File Locations Cheat Sheet
-
-| File/View | Purpose | Component/Template |
-|-----------|---------|-------------------|
-| `resources/js/Pages/Index.vue` | Dashboard | Inertia Vue |
-| `resources/js/Pages/GuestLayout.vue` | Guest layout | Inertia Vue |
-| `resources/views/bp/index.blade.php` | BP index | `<x-guest-layout>` |
-| `resources/views/bp/create.blade.php` | Create record | `<x-guest-layout>` |
-| `auth/login.blade.php` | Login form | Inertia |
-| `auth/register.blade.php` | Register form | Inertia |
-
-## URLs
-- Application: http://localhost:8000
-- Login: http://localhost:8000/login
-- Register: http://localhost:8000/register
-- Forgot Password: http://localhost:8000/password/reset
-
-## Development Commands Cheat Sheet
-
-| Command | Purpose |
-|---------|---------|
-| `composer install` | Install PHP deps |
-| `php artisan migrate:fresh --force` | Reset DB |
-| `php artisan db:seed` | Seed demo data |
-| `npm install` | Install Node deps |
-| `npm run dev` | Dev mode (hot reload) |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `php artisan serve` | Start server |
-
-## Next Steps / Pending Tasks
-
-1. **Decide on GuestLayout component**:
-   - Create PHP Laravel View Component class
-   - OR Remove `<x-guest-layout>` from blade files
-   - Use `layouts/guest.blade.ext` instead
-
-2. **Test application flow**:
-   - Visit http://localhost:8000
-   - Login via Inertia power
-   - Test BP recording functionality
-
-3. **Consider adding**:
-   - API routes for mobile app
-   - Additional BP analytics
-   - User settings/notifications
+## Known Issues & Notes (verified against disk)
+- **No `vendor/` on disk** → `php artisan` fully broken until `composer.phar install`.
+- **No `node_modules/` / `public/build/`** → asset build never ran; dev server assets not available.
+- **No `.env` on disk** → only `.env.example`; `app.config()` needs `key:generate`.
+- **`node`/`npm`/`nodejs` not on PATH.**
+- **`BpController` naming confusion:** real file is `app/Http/Controllers/Bp/BpController.php`
+  (namespaced `App\Http\Controllers\Bp`); the path name `BpController.php` is misleading.
+- **Seeder bug:** `BPSampleSeeder` creates users then only loops records for the first slice (`->slice(0, 1)`) — effectively 1 user, not "2 users × 5 readings."
+- **No `BloodPressureFactory`** in `database/factories/` (only `UserFactory`). Tests use `User::factory(...)` directly.
+- **Very thin test suite:** only `tests/Feature/BloodPressureTest.php` is a real feature test; the rest are default Breeze/example tests.
+- **No `routes/api.php`** and no Sanctum API endpoints installed.
 
 ## Contact & Context
 - Location: `/home/developer/pla/luffof/`
 - README: `/home/developer/pla/luffof/README.md`
 - This document: `/home/developer/pla/luffof/AGENTS.md`
-
----
-## Latest Changes - Session Summary
-
-### Session Progress
-
-#### Completed
-- ✅ Fixed missing `$authUser` variable in BpController
-- ✅ Cleaned up auth conditional rendering in index.blade.php
-- ✅ Improved layout with centered title and action buttons
-- ✅ Added empty state message for record list
-- ✅ Pushed changes to GitHub (commit cd43944)
-- ✅ Server running on localhost:8000
-
-#### Current Focus
-- Testing login flow with demo credentials
-- Resolving password hashing configuration issues
-
-#### Key Files Modified
-- `resources/views/bp/index.blade.php`: Added auth conditional logic, cleaned layout
-- `app/Http/Controllers/Bp/BpController.php`: Added `$request->user()` to scope
-
-#### Technical Context
-- Laravel 11 with Inertia.js 2.0
-- SQLite database with seeded records
-- All routes functional via Ziggy
-- Form validation: systolic (80-250), diastolic (60-120)
-
-## Contact & Context
-- Location: `/home/developer/pla/luffof/`
-- README: `/home/developer/pla/luffof/README.md`
-- This document: `/home/developer/pla/luffof/AGENTS.md`
-
----
-## Progress Log
-
-| Date | Task | Status | Notes |
-|------|------|--------|-------|
-| 2026-09-07 | Finalize GuestLayout component | ✅ | Commit cd43944 |
-
-## TODO
-
-| Date | Task | Status | Notes |
-|------|------|--------|-------|
-| 2026-09-07 | Implement PHP component `<x-guest-layout>` | 🔍 | Decision pending |
-
-*Updated with latest session progress - Resume from here*
-
