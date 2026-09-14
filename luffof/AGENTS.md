@@ -53,9 +53,13 @@ Remote: `git@github.com:gbetanzos/pla.git` — local is 1 commit ahead of `origi
   /resources/views/layouts/
     app.blade.php                          # authenticated layout
     guest.blade.php                        # guest / auth layout (Bootstrap CDN)
-  app.blade.php                            # welcome landing
-  dashboard.blade.php
-  welcome.blade.php
+  app.blade.php                            # authenticated layout
+  guest.blade.php                        # guest / auth layout (Bootstrap CDN)
+  dashboard.blade.php                    # renders empty
+  login.blade.php                         # register link removed
+  register.blade.php                      # EMPTY — renders blank page (no heading/form)
+  welcome.blade.php                       # register button removed
+  profile/edit.blade.php
   profile/edit.blade.php
 /routes/
   web.php (BP CRUD)
@@ -67,8 +71,22 @@ Remote: `git@github.com:gbetanzos/pla.git` — local is 1 commit ahead of `origi
 
 ## Authentication Flow
 1. User visits `/` → `welcome.blade.php` (pure Blade landing page)
-2. Authenticated → `/dashboard` (`auth` + `verified` middleware) → `dashboard.blade.php`
-3. Breeze provides: login / register / verify-email / password-reset (Blade views, not Inertia)
+2. Authenticated → `/dashboard` (`auth` + `verified` middleware) → `database.blade.php`
+3. Breeze provides: login / verify-email / password-reset (Blade views). Register UI **removed** — register now renders an empty page; the register route + controller remain (see Recent Changes)
+
+## Recent Changes
+### Removed register templates (Option A — templates only)
+- Registered page renders empty: `resources/views/auth/register.blade.php` contains only an empty `@section('content')` shell (no heading/form).
+- Register references removed from `resources/views/auth/login.blade.php`, `resources/views/welcome.blade.php`, `resources/views/layouts/app.blade.php` navbar.
+- Left untouched: register route (`routes/auth.php`), `App\Http\Controllers\Auth\RegisteredUserController.php`, and unused `$canRegister` in `routes/web.php`. Register route still on disk → `/register` 200s with blank page.
+
+## Notes & Context
+- **Login preserved.** Register UI removed but register route/controller still exist (out of scope; kept for safety).
+
+## Database Tables (from migrations)
+ 1. User visits `/` → `welcome.blade.php` (pure Blade landing page)
+ 2. Authenticated → `/dashboard` (`auth` + `verified` middleware) → `dashboard.blade.php`
+ 3. Breeze provides: login / register / verify-email / password-reset (Blade views, not Inertia).
 
 ## Database Tables (from migrations)
 - `users` — authentication

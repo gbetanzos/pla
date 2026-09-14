@@ -15,7 +15,6 @@
       <ul class="navbar-nav ms-auto">
         @guest
         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
         @else
         <li class="nav-item"><a class="nav-link" href="{{ route('bp.index') }}">Blood Pressure</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Profile</a></li>
