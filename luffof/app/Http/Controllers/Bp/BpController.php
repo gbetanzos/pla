@@ -78,7 +78,7 @@ class BpController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        if ($request->user() !== $bp->user) {
+        if ($request->user()->id !== $bp->user->id) {
             return redirect()->route('bp.index')
                 ->with('error', 'You can only delete your own record.');
         }
