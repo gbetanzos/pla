@@ -68,16 +68,32 @@ class BpController extends Controller
             ->with('success', 'Blood pressure reading updated successfully.');
     }
 
-public function destroy(Request $request, BloodPressure $bp): RedirectResponse
-{
-    if ($request->user() !== $bp->user) {
+    public function destroy(Request $request, BloodPressure $bp): RedirectResponse
+    {
+        Log::info('Blood pressure delete attempt', [
+            'user' => $request->user(),
+            'blood_pressure_id' => $bp->id,
+            'blood_pressure_user_id' => $bp->user_id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        if ($request->user() !== $bp->user) {
+            return redirect()->route('bp.index')
+                ->with('error', 'You can only delete your own record.');
+        }
+
+        $bp->delete();
+
+        Log::info('Blood pressure deleted', [
+            'user' => $request->user(),
+            'blood_pressure_id' => $bp->id,
+            'blood_pressure_user_id' => $bp->user_id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         return redirect()->route('bp.index')
-            ->with('error', 'You can only delete your own record.');
+            ->with('success', 'Blood pressure reading deleted successfully.');
     }
-
-    $bp->delete();
-
-    return redirect()->route('bp.index')
-        ->with('success', 'Blood pressure reading deleted successfully.');
-}
 }
