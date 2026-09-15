@@ -70,7 +70,7 @@ class BpController extends Controller
 
     public function destroy(Request $request, BloodPressure $bp): RedirectResponse
     {
-        Log::info('Blood pressure delete attempt', [
+        \Illuminate\Support\Facades\Log::info('Blood pressure delete attempt', [
             'user' => $request->user(),
             'blood_pressure_id' => $bp->id,
             'blood_pressure_user_id' => $bp->user_id,
@@ -85,7 +85,7 @@ class BpController extends Controller
 
         $bp->delete();
 
-        Log::info('Blood pressure deleted', [
+        \Illuminate\Support\Facades\Log::info('Blood pressure deleted', [
             'user' => $request->user(),
             'blood_pressure_id' => $bp->id,
             'blood_pressure_user_id' => $bp->user_id,
@@ -97,3 +97,4 @@ class BpController extends Controller
             ->with('success', 'Blood pressure reading deleted successfully.');
     }
 }
+
