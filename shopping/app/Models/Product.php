@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'brand', 'price', 'notes'];
+    use HasFactory;
+
+    protected $fillable = ['name', 'price', 'brand', 'notes'];
 
     protected $casts = [
         'price' => 'decimal:2',

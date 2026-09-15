@@ -13,8 +13,16 @@ class ShoppingListController extends Controller
         abort_if($list->user_id !== auth()->id(), 403);
     }
 
-    protected function collectItems(Request $request): array
+    protected function collectItems(Request $request, ?array $current = null): array
     {
+        $current = is_array($current) ? $current : [];
+
+        // When no explicit product_ids are submitted, leave items (and their
+        // checked/bought state) exactly as they were.
+        if (empty((array)$request->product_ids)) {
+            return $current;
+        }
+
         return collect((array)$request->product_ids)
             ->map(fn($productId) => ['product_id' => (int)$productId, 'checked' => false])
             ->values()
@@ -60,22 +68,21 @@ class ShoppingListController extends Controller
 
         $data = array_merge($data, $this->collectItems($request));
         $list = ShoppingList::create($data);
-        return redirect()->route('shopping-lists.index')->with('success', 'Shopping list created.');
-    }
 
+        return redirect()->route('shopping-lists.index')->with('success', 'Shopping list created.');
+
+    }
     public function show(ShoppingList $list)
     {
         $this->authorize($list);
         $products = Product::all();
-        $items = json_decode($list->items, true) ?: [];
+        $items = $list->items;
         $totalCost = 0;
 
         foreach ($items as $item) {
-            if (isset($item['product_id'])) {
-                $product = $products->find($item['product_id']);
-                if ($product && $product->price) {
-                    $totalCost += $product->price;
-                }
+            $product = isset($item['product_id']) ? $products->find($item['product_id']) : null;
+            if ($product && $product->price) {
+                $totalCost += $product->price;
             }
         }
 
@@ -100,7 +107,9 @@ class ShoppingListController extends Controller
         $this->authorize($list);
         $data = $request->only(['title', 'description', 'priority', 'due_date', 'notes']);
 
-        $list->update(array_merge($data, $this->collectItems($request)));
+        $items = $this->collectItems($request, $list->items);
+        $list->update(array_merge($data, $items));
+
         return redirect()->route('shopping-lists.show', $list)->with('success', 'Shopping list updated.');
     }
 
@@ -112,6 +121,7 @@ class ShoppingListController extends Controller
 
         foreach ($items as &$item) {
             if ((int)$item['product_id'] === $itemId) {
+                $item['product_id'] = (int)$item['product_id'];
                 $item['checked'] = $request->boolean('checked') ? true : !$item['checked'];
             }
         }
