@@ -37,15 +37,6 @@
                 <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes', $product->notes) }}</textarea>
             </div>
 
-            <div class="mb-3">
-                <label for="priority" class="form-label">Priority</label>
-                <select class="form-select" id="priority" name="priority">
-                    <option value="1" {{ old('priority', $product->priority) == 1 ? 'selected' : '' }}>High</option>
-                    <option value="2" {{ old('priority', $product->priority) == 2 ? 'selected' : '' }}>Medium</option>
-                    <option value="3" {{ old('priority', $product->priority) == 3 ? 'selected' : '' }}>Low</option>
-                </select>
-            </div>
-
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-1"></i>Update</button>
                 <a href="{{ route('shopping-lists.index') }}" class="btn btn-success">

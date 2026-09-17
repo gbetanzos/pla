@@ -1,18 +1,10 @@
 # Shopping List App - Progress Log
 
-Last Updated: Sat Sep 06 2026 12:00 UTC
+Last Updated: Sep 17 2026
 
-## 🔄 Completed in Latest Session (Sep 6 2026)
+## 🔄 Completed in Latest Session
 
-### User Authorization (#2)
-- Added `authorize(ShoppingList $list)` helper → `abort_if($list->user_id !== auth()->id(), 403)`
-- Applied to: `show`, `edit`, `update`, `toggleItem`, `duplicate`, `markComplete`, `addItem`, `destroy`
-- `index()` now filters by `user_id` so users only see their own lists
-- Ran `composer install` — vendor/ was missing, 106 packages restored
-
-### Previous Session (Jul 6 2026)
-
-### Add Products to Shopping List — Controller Fixes
+### Add Products to Shopping List — Controller Fixes (previous session, Jul 6 2026)
 - **#13**: Added `addItem()` method to `ShoppingListController` — was missing despite route definition at `web.php:28`
 - **#14**: Fixed `store()` to accept `product_ids[]` and persist items on list creation (was ignored)
 - **#15**: Rewrote `update()` to properly reconcile submitted product IDs with existing items JSON column
@@ -22,15 +14,21 @@ Last Updated: Sat Sep 06 2026 12:00 UTC
 ### Composer Install
 - Ran `composer install` — vendor/ was missing, 106 packages installed
 
+### User Authorization (#2)
+- Added `authorize(ShoppingList $list)` helper → `abort_if($list->user_id !== auth()->id(), 403)`
+- Applied to: `show`, `edit`, `update`, `toggleItem`, `duplicate`, `markComplete`, `addItem`, `destroy`
+- `index()` now filters by `user_id` so users only see their own lists
+
 ### View Fixes
 - **#17**: `create.blade.php` now has product checkboxes in the form to select products during list creation
 
-### Pending for Next Session
-- **#18**: `show.blade.php` never renders the items list — displays metadata only, no product rows visible
-- **#19**: `edit.blade.php` line 68-70 uses a broken hidden `<input>` with malformed JSON instead of real checkboxes
+### Pending for Next Session — RESOLVED (implemented in this session)
+- **#18**: `show.blade.php` renders the items list, not metadata only
+- **#19**: `edit.blade.php` uses real `product_ids[]` checkboxes, not a broken hidden `<input>`
 
-### Git Sync
-- Pulled latest: `.env.example` SESSION_DRIVER changed from `file` → `database`, simplified MySQL/MariaDB SSL config in `config/database.php`
+### Git Sync — SESSION DRIVER (verified, no change)
+- `.env`/`.env.example` still use `SESSION_DRIVER=file` (config/session.php default falls back to `database`)
+- No MySQL/MariaDB SSL simplification was performed
 
 ## ✅ Completed Features
 
@@ -113,16 +111,16 @@ Last Updated: Sat Sep 06 2026 12:00 UTC
 - UI button displays only when list not complete
 - Visual badge (✓) on completed lists
 
-## 📌 Still Pending
-- **#3**: No `$request->validate()` in `ProductController@store` and `@update` — accepts any input silently
+## 📌 Still Pending — RESOLVED (Sep 17 2026 audit)
+- ~~#3~~: Product validation under-enforced (only `name`) — **fixed**: `ProductStoreRequest`/`ProductUpdateRequest` now validate `name`, `brand`, `numeric price`, `notes`; removed dead product `priority` select (no column exists on products; priority belongs to ShoppingLists)
 - **#9**: ~~Product model missing `$fillable`~~ — fixed (has `protected $fillable`)
 - **#10**: ~~ShoppingList has `public $fillable`~~ — fixed (uses `protected $fillable`)
 - **#11**: ~~Sorting button shows dead alert~~ — fixed (uses form submit)
 - **#12**: ~~Product filter ignored in controller~~ — fixed (search works)
 
 ## 🚫 Removed
-- `$fillable` properties from models (Laravel 11 uses static assignment)
 - Duplicate `toggle` method in ShoppingListController (kept only the clean POST version)
+- Dead product `priority` `<select>` from `products/edit.blade.php` (no corresponding column on the products table; priority belongs to ShoppingLists)
 - Old incomplete file artifacts
 
 ## 📋 UI Details
